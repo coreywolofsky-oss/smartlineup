@@ -30,12 +30,13 @@
             <div class="flex items-center space-x-2">
                 <button id="toggle-sound-btn" class="p-2 rounded-full text-emerald-400 bg-emerald-500/10" title="Toggle Sound">
                     <svg id="sound-on-icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18.75V5.25L7.75 9.5H4.5v5h3.25L12 18.75z"></path></svg>
-                    <svg id="sound-off-icon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25M12 18.75V5.25L7.75 9.5H4.5v5h3.25L12 18.75z"></path></svg>
+                    <svg id="sound-off-icon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l-2.25-2.25M19.5 12l-2.25 2.25M12 18.75V5.25L7.75 9.5H4.5v5h3.25L12 18.75z"></path></svg>
                 </button>
                 <button id="toggle-voice-btn" class="p-2 rounded-full text-emerald-400 bg-emerald-500/10" title="Voice Assist"><span id="voice-status" class="text-xs font-bold">TTS</span></button>
             </div>
         </div>
     </header>
+    
     <!-- VIEWPORT CONTAINER -->
     <main class="max-w-md w-full mx-auto px-4 py-4 overflow-y-auto">
         
@@ -82,6 +83,7 @@
                 <div id="roster-list-container" class="space-y-2.5"></div>
             </div>
         </div>
+
         <!-- Tab 2: GAMES MANAGER -->
         <div id="tab-games" class="tab-content space-y-4 hidden">
             <div id="games-hub-section" class="space-y-4 animate-fade-in">
@@ -132,6 +134,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Tab 3: ACTIVE MATCH VIEW -->
         <div id="tab-match" class="tab-content space-y-4 hidden animate-fade-in">
             <div id="match-fallback-screen" class="bg-slate-800/40 rounded-3xl p-10 border border-slate-700 border-dashed text-center text-slate-500">
@@ -147,6 +150,7 @@
                     </div>
                     <button id="next-shift-btn" class="p-1.5 bg-slate-700 hover:bg-slate-650 rounded-lg text-white">→</button>
                 </div>
+                
                 <!-- SOCCER PITCH GRAPHIC -->
                 <div class="relative aspect-[3/4] w-full bg-emerald-800 rounded-3xl border-2 border-white/40 shadow-inner overflow-hidden p-4 flex flex-col justify-between">
                     <div class="absolute inset-0 pointer-events-none opacity-10 flex flex-col">
@@ -191,7 +195,8 @@
                         <div id="pitch-GK" class="w-12 h-12 rounded-full bg-yellow-400 border-2 border-white text-slate-950 flex flex-col items-center justify-center font-bold shadow-md"></div>
                     </div>
                 </div>
-                <!-- PLAYTIME MATRIX GRID -->
+                
+                <!-- PLAYTIME MATRIX GRID with Swap Feature -->
                 <div class="bg-slate-800 p-4 rounded-3xl border border-slate-700/80 space-y-3 overflow-hidden shadow-md">
                     <div class="flex items-center justify-between">
                         <h3 class="font-extrabold text-white text-sm flex items-center gap-1.5">Playtime & Shift Matrix</h3>
@@ -199,6 +204,7 @@
                     </div>
                     <div id="matrix-scroll-wrapper" class="overflow-x-auto -mx-4 px-4 scrollbar-thin"></div>
                 </div>
+                
                 <!-- Controls Card -->
                 <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-center space-y-4 shadow-md">
                     <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-extrabold tracking-widest px-2.5 py-1 rounded-full uppercase border border-emerald-500/20">Live Match Tracker</span>
@@ -213,11 +219,13 @@
                         <button id="manual-speak-subs-btn" class="text-[10px] mx-auto bg-slate-750 text-emerald-400 hover:bg-slate-700 font-bold px-3 py-1.5 rounded-lg border border-slate-700">🗣️ Speak Subs</button>
                     </div>
                 </div>
+                
                 <!-- Substitution Helper Panel -->
                 <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 shadow-sm space-y-3">
                     <h3 class="font-bold text-sm text-white">Upcoming Substitutions</h3>
                     <div id="match-subs-announcer-content" class="space-y-3"></div>
                 </div>
+                
                 <!-- Scoreboard Card -->
                 <div class="bg-slate-800 border border-slate-700 rounded-3xl p-4 shadow-sm space-y-4">
                     <div class="text-center font-bold text-xs text-slate-400 uppercase tracking-wider">Live Scorekeeper</div>
@@ -248,12 +256,14 @@
                 </div>
             </div>
         </div>
+        
         <!-- Tab 4: ARCHIVED HISTORY -->
         <div id="tab-logs" class="tab-content space-y-4 hidden">
             <h2 class="text-sm font-extrabold text-slate-400 uppercase tracking-wider">Completed Game Archives</h2>
             <div id="completed-logs-list" class="space-y-3"></div>
         </div>
     </main>
+    
     <!-- CREATE GAME POPUP MODAL -->
     <div id="modal-create-game" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <form id="create-game-form" class="bg-slate-800 border border-slate-700 rounded-3xl p-5 w-full max-w-sm space-y-4 animate-scale-up">
@@ -297,6 +307,7 @@
             </div>
         </form>
     </div>
+    
     <!-- LOG GOAL POPUP MODAL -->
     <div id="modal-log-goal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-800 border border-slate-700 rounded-3xl p-5 w-full max-w-sm space-y-4 animate-scale-up">
@@ -315,6 +326,7 @@
             </div>
         </div>
     </div>
+    
     <!-- SYSTEM CONFIRMATION MODAL -->
     <div id="modal-confirm" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-scale-up">
         <div class="bg-slate-800 border border-slate-700 rounded-3xl p-5 w-full max-w-sm space-y-4">
@@ -326,6 +338,7 @@
             </div>
         </div>
     </div>
+    
     <!-- STATS MODAL -->
     <div id="modal-player-stats" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-scale-up">
         <div class="bg-slate-800 border border-slate-700 rounded-3xl p-5 w-full max-w-sm space-y-4">
@@ -391,6 +404,38 @@
         </div>
     </div>
 
+    <!-- PAST GAME DETAILS MODAL -->
+    <div id="modal-past-game" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-scale-up">
+        <div class="bg-slate-800 border border-slate-700 rounded-3xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="p-4 border-b border-slate-700 bg-slate-800 z-20 flex justify-between items-center sticky top-0">
+                <div>
+                    <h3 id="past-game-title" class="font-extrabold text-lg text-white">vs Opponent</h3>
+                    <p id="past-game-date" class="text-xs text-emerald-400 font-mono">Date</p>
+                </div>
+                <div class="text-right">
+                    <div id="past-game-score" class="text-2xl font-black text-white">0 - 0</div>
+                    <span class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Final</span>
+                </div>
+            </div>
+            
+            <div class="p-4 overflow-y-auto overflow-x-hidden flex-1 space-y-4">
+                <div class="bg-slate-900/50 py-3 rounded-2xl border border-slate-700/80 overflow-hidden shadow-inner">
+                    <h4 class="font-extrabold text-white text-xs mb-3 px-3 uppercase tracking-wider text-slate-400">Match Lineup Record</h4>
+                    <div id="past-game-matrix-wrapper" class="overflow-x-auto px-3 scrollbar-thin"></div>
+                </div>
+                
+                <div id="past-game-goals-container" class="space-y-1.5 hidden">
+                    <h4 class="font-extrabold text-white text-xs mb-2 uppercase tracking-wider text-slate-400">Goal Events</h4>
+                    <div id="past-game-goals-list" class="space-y-1.5"></div>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-slate-700 bg-slate-850">
+                <button type="button" id="close-past-game-btn" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl text-xs transition-colors">Close Archives</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TAB FOOTER NAVIGATION BAR -->
     <footer class="fixed bottom-0 left-0 right-0 bg-slate-800/95 backdrop-blur-md border-t border-slate-700 shadow-xl z-50 font-sans" style="padding-bottom: min(20px, env(safe-area-inset-bottom));">
         <div class="max-w-md mx-auto flex justify-around py-2.5 px-1">
@@ -413,6 +458,7 @@
             </button>
         </div>
     </footer>
+    
     <!-- BUSINESS LOGIC ENGINE -->
     <script>
         // Core Starting Team Template
@@ -441,7 +487,6 @@
         let timerInterval = null;
         let confirmActionCallback = null;
 
-        // --- Safe Binding Guardrail to prevent null event crashes ---
         function safeBindClick(id, handler) {
             const el = document.getElementById(id);
             if (el) {
@@ -515,6 +560,76 @@
             });
             document.getElementById('modal-player-stats').classList.remove('hidden');
         };
+
+        window.viewPastGameDetails = function(gameId) {
+            const game = games.find(g => g.id === gameId);
+            if (!game) return;
+            
+            document.getElementById('past-game-title').innerText = "vs " + game.opponent;
+            document.getElementById('past-game-date').innerText = game.date;
+            document.getElementById('past-game-score').innerText = `${game.homeScore || 0} - ${game.awayScore || 0}`;
+            
+            const goalsList = document.getElementById('past-game-goals-list');
+            goalsList.innerHTML = '';
+            if (game.goalEvents && game.goalEvents.length > 0) {
+                document.getElementById('past-game-goals-container').classList.remove('hidden');
+                game.goalEvents.forEach(evt => {
+                    const row = document.createElement('div');
+                    row.className = 'text-xs text-slate-300 flex items-center justify-between py-1.5 px-3 bg-slate-800 rounded-lg border border-slate-700';
+                    row.innerHTML = `<span class="font-semibold text-white">⚽ ${evt.scorerName}</span><span class="text-[10px] text-slate-500">${evt.shift}</span>`;
+                    goalsList.appendChild(row);
+                });
+            } else {
+                document.getElementById('past-game-goals-container').classList.add('hidden');
+            }
+            
+            renderPastGameMatrix(game, document.getElementById('past-game-matrix-wrapper'));
+            document.getElementById('modal-past-game').classList.remove('hidden');
+        };
+
+        function renderPastGameMatrix(game, wrapper) {
+            wrapper.innerHTML = '';
+            const presentIds = Object.keys(game.attendance).filter(id => game.attendance[id]);
+            const present = presentIds.map(id => players.find(p => p.id === id) || { id, number: '?', name: 'Unknown' });
+            
+            const table = document.createElement('table');
+            table.className = 'w-full text-left border-collapse min-w-[500px] text-xs';
+            let headerHtml = `<thead><tr class="border-b border-slate-700/60 text-[10px] text-slate-400 font-bold uppercase"><th class="py-2 pr-2 sticky left-0 bg-slate-800 z-10 w-24">Player</th>`;
+            
+            game.lineup.forEach((_, sIdx) => {
+                const label = game.shiftsPerQuarter === 1 ? `Q${sIdx + 1}` : `Q${Math.floor(sIdx / game.shiftsPerQuarter) + 1}-S${(sIdx % game.shiftsPerQuarter) + 1}`;
+                headerHtml += `<th class="py-2 px-1 text-center text-[9px]">${label}</th>`;
+            });
+            headerHtml += `<th class="py-2 pl-3 text-right">Bench</th><th class="py-2 pl-1.5 text-right text-emerald-400">Off</th><th class="py-2 pl-1.5 text-right text-blue-400">Def</th><th class="py-2 pl-1.5 text-right text-amber-400">GK</th></tr></thead>`;
+            
+            let bodyHtml = '<tbody class="divide-y divide-slate-700/40">';
+            present.forEach(p => {
+                bodyHtml += `
+                    <tr class="hover:bg-slate-750/30">
+                        <td class="py-2 pr-2 font-bold text-white sticky left-0 bg-slate-800 z-10 truncate w-24 border-r border-slate-700/30 flex items-center gap-1">
+                            <span class="text-[10px] text-slate-400">#${p.number}</span><span>${p.name}</span>
+                        </td>
+                `;
+                let totalBench = 0, totalOff = 0, totalDef = 0, totalGK = 0;
+                game.lineup.forEach(shift => {
+                    const role = getPlayerShiftRoleCode(p.id, shift);
+                    if (role === 'GK') totalGK++;
+                    else if (role === 'OFF') totalOff++;
+                    else if (role === 'DEF') totalDef++;
+                    else totalBench++;
+                    
+                    let badgeClass = 'bg-slate-700/50 text-slate-400 border border-slate-700/80';
+                    if (role === 'GK') badgeClass = 'bg-amber-500/90 text-slate-950 font-bold';
+                    else if (role === 'OFF') badgeClass = 'bg-emerald-500 text-slate-950 font-bold';
+                    else if (role === 'DEF') badgeClass = 'bg-blue-600 text-white font-bold';
+                    bodyHtml += `<td class="py-1.5 px-0.5 text-center"><span class="inline-block text-[9px] px-1.5 py-0.5 rounded-md min-w-[28px] ${badgeClass}">${role}</span></td>`;
+                });
+                bodyHtml += `<td class="py-2 pl-3 text-right text-slate-400 font-medium">${totalBench}</td><td class="py-2 pl-1.5 text-right text-emerald-400 font-bold">${totalOff}</td><td class="py-2 pl-1.5 text-right text-blue-400 font-bold">${totalDef}</td><td class="py-2 pl-1.5 text-right text-amber-400 font-bold">${totalGK}</td></tr>`;
+            });
+            bodyHtml += '</tbody>';
+            table.innerHTML = headerHtml + bodyHtml;
+            wrapper.appendChild(table);
+        }
 
         function renderRoster() {
             const listContainer = document.getElementById('roster-list-container');
@@ -744,6 +859,7 @@
                 triggerConfirmation("Missing Goalkeeper Slots", "Assign a goalie for Quarter(s) " + unfilled.join(', ') + " before generating.", null);
                 return;
             }
+            
             // Career benched increments logic to equalize career bench time
             const currentBenchInThisGame = {};
             presentPlayers.forEach(p => { currentBenchInThisGame[p.id] = 0; });
@@ -837,7 +953,6 @@
             updateTabNavigation('match');
         }
 
-        // --- MISSING HELPER FUNCTIONS RESTORED HERE ---
         function getShiftDetailsLabel(shiftIndex, shiftsPerQuarter) {
             const q = Math.floor(shiftIndex / shiftsPerQuarter) + 1;
             const s = (shiftIndex % shiftsPerQuarter) + 1;
@@ -860,7 +975,6 @@
             const subsIn = [];
             const subsOut = [];
 
-            // Compute subbing out
             currentActive.forEach(id => {
                 if (!nextActive.includes(id)) {
                     const p = players.find(x => x.id === id);
@@ -868,7 +982,6 @@
                 }
             });
 
-            // Compute subbing in
             const positions = ['GK', 'OL', 'OM', 'OR', 'DL', 'DM', 'DR'];
             positions.forEach(pos => {
                 const id = nextShift[pos];
@@ -893,7 +1006,8 @@
 
             completedGames.forEach(game => {
                 const card = document.createElement('div');
-                card.className = 'bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-sm animate-scale-up';
+                card.className = 'bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-sm animate-scale-up cursor-pointer hover:bg-slate-750 transition-colors';
+                card.addEventListener('click', () => viewPastGameDetails(game.id));
                 card.innerHTML = `
                     <div class="flex justify-between items-start border-b border-slate-700 pb-2 mb-2">
                         <div>
@@ -907,13 +1021,14 @@
                             <span class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Final</span>
                         </div>
                     </div>
+                    <div class="text-[10px] text-slate-500 font-semibold text-center mt-2 flex items-center justify-center gap-1">
+                        <span>Tap to view full match archives & lineups</span> <span>→</span>
+                    </div>
                 `;
                 container.appendChild(card);
             });
         }
-        // ----------------------------------------------
 
-        // --- TAB 3: ACTIVE MATCH VIEW ---
         function renderMatchTab() {
             const game = games.find(g => g.id === activeGameId);
             if (!game || !game.lineup) {
@@ -925,7 +1040,6 @@
             document.getElementById('active-match-screen').classList.remove('hidden');
             const shift = game.lineup[game.currentShiftIndex];
             
-            // This label previously caused the UI to crash because the function was missing!
             document.getElementById('active-shift-title').innerText = getShiftDetailsLabel(game.currentShiftIndex, game.shiftsPerQuarter);
             
             const positions = ['GK', 'OL', 'OM', 'OR', 'DL', 'DM', 'DR'];
@@ -1039,7 +1153,6 @@
                 return;
             }
             
-            // This function previously crashed the app as well because it was deleted!
             const { subsIn, subsOut } = computeSubstitutions(game.currentShiftIndex, nextIdx);
             
             if (subsIn.length === 0 && subsOut.length === 0) {
@@ -1276,8 +1389,11 @@
             });
             
             safeBindClick('save-completed-game-btn', () => { handleCloseActiveGameLog(); });
+            
             safeBindClick('close-stats-modal-btn', () => { document.getElementById('modal-player-stats').classList.add('hidden'); });
             
+            safeBindClick('close-past-game-btn', () => { document.getElementById('modal-past-game').classList.add('hidden'); });
+
             safeBindClick('confirm-cancel-btn', () => {
                 document.getElementById('modal-confirm').classList.add('hidden');
                 confirmActionCallback = null;
@@ -1302,7 +1418,6 @@
                 document.getElementById('swap-player-1').innerHTML = options;
                 document.getElementById('swap-player-2').innerHTML = options;
                 
-                // Select 2nd option for player 2 by default if available
                 if(present.length > 1) document.getElementById('swap-player-2').selectedIndex = 1;
                 
                 document.getElementById('modal-swap-players').classList.remove('hidden');
@@ -1321,10 +1436,9 @@
                 
                 if (p1Id === p2Id) {
                     document.getElementById('modal-swap-players').classList.add('hidden');
-                    return; // Prevent swapping player with themselves
+                    return;
                 }
                 
-                // Perform complete schedule swap
                 game.lineup.forEach(shift => {
                     const positions = ['GK', 'OL', 'OM', 'OR', 'DL', 'DM', 'DR'];
                     positions.forEach(pos => {
@@ -1343,7 +1457,6 @@
                     }
                 });
                 
-                // Swap quarter goalie assignments if applicable
                 if (game.selectedGoalies) {
                     game.selectedGoalies = game.selectedGoalies.map(gkId => {
                         if (gkId === p1Id) return p2Id;
@@ -1354,7 +1467,7 @@
                 
                 saveGames();
                 document.getElementById('modal-swap-players').classList.add('hidden');
-                renderMatchTab(); // Instantly update pitch graphic and matrix grids
+                renderMatchTab();
             });
         }
 
