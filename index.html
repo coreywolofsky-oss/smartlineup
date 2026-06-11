@@ -74,9 +74,11 @@
                     <button type="submit" id="save-player-btn" class="bg-emerald-500 text-slate-950 font-bold text-xs py-2 px-4 rounded-xl hover:bg-emerald-400">Add Player</button>
                 </div>
             </form>
-            <div class="flex gap-2">
-                <button id="load-demo-btn" class="flex-1 bg-slate-800 border border-slate-700 text-xs font-semibold py-2 rounded-xl text-slate-300 flex items-center justify-center gap-1.5">🔄 Load Template Team</button>
-                <button id="clear-roster-btn" class="bg-red-500/10 border border-red-500/20 text-xs font-semibold text-red-400 py-2 px-4 rounded-xl hover:bg-red-500/20">Clear All</button>
+            <div class="flex flex-wrap gap-1.5">
+                <button id="load-demo-btn" class="flex-1 min-w-[90px] bg-slate-800 border border-slate-700 text-[10px] font-bold py-2 rounded-xl text-slate-300 flex items-center justify-center gap-1">🔄 Load Default</button>
+                <button id="export-team-btn" class="flex-1 min-w-[70px] bg-slate-800 border border-slate-700 text-[10px] font-bold py-2 rounded-xl text-slate-300 flex items-center justify-center gap-1">📤 Export</button>
+                <button id="import-team-btn" class="flex-1 min-w-[70px] bg-slate-800 border border-slate-700 text-[10px] font-bold py-2 rounded-xl text-slate-300 flex items-center justify-center gap-1">📥 Import</button>
+                <button id="clear-roster-btn" class="bg-red-500/10 border border-red-500/20 text-[10px] font-bold text-red-400 py-2 px-3 rounded-xl hover:bg-red-500/20">Clear All</button>
             </div>
             <div class="space-y-2.5">
                 <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider px-1">Roster Profiles</h2>
@@ -200,7 +202,7 @@
                 <div class="bg-slate-800 p-4 rounded-3xl border border-slate-700/80 space-y-3 overflow-hidden shadow-md">
                     <div class="flex items-center justify-between">
                         <h3 class="font-extrabold text-white text-sm flex items-center gap-1.5">Playtime & Shift Matrix</h3>
-                        <button id="open-swap-modal-btn" class="text-[10px] bg-slate-700 hover:bg-slate-600 text-white px-2 py-1 rounded-lg border border-slate-600 transition-colors">🔄 Swap Players</button>
+                        <button id="open-swap-modal-btn" class="text-[10px] bg-slate-700 hover:bg-slate-650 text-white px-2 py-1 rounded-lg border border-slate-600 transition-colors">🔄 Swap Players</button>
                     </div>
                     <div id="matrix-scroll-wrapper" class="overflow-x-auto -mx-4 px-4 scrollbar-thin"></div>
                 </div>
@@ -441,6 +443,19 @@
         </div>
     </div>
 
+    <!-- IMPORT/EXPORT MODAL -->
+    <div id="modal-import-export" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-5 w-full max-w-sm space-y-4 animate-scale-up">
+            <h3 id="import-export-title" class="font-bold text-base text-white text-center">📤 Export / Import Roster</h3>
+            <p id="import-export-help" class="text-xs text-slate-400 text-center leading-relaxed">Copy this code to share your team roster, or paste a code below to load your roster.</p>
+            <textarea id="import-export-textarea" class="w-full h-32 bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-300 font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="Paste roster code here..."></textarea>
+            <div class="flex space-x-2 pt-2">
+                <button type="button" id="close-import-export-btn" class="flex-1 bg-slate-700 text-slate-300 font-bold py-2.5 rounded-xl text-xs">Close</button>
+                <button type="button" id="action-import-export-btn" class="flex-1 bg-emerald-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Copy Code</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TAB FOOTER NAVIGATION BAR -->
     <footer class="fixed bottom-0 left-0 right-0 bg-slate-800/95 backdrop-blur-md border-t border-slate-700 shadow-xl z-50 font-sans" style="padding-bottom: min(20px, env(safe-area-inset-bottom));">
         <div class="max-w-md mx-auto flex justify-around py-2.5 px-1">
@@ -449,7 +464,7 @@
                 <span class="text-[10px] font-bold">Roster</span>
             </button>
             <button id="nav-games" class="flex flex-col items-center space-y-0.5 py-1 px-3 rounded-xl transition-all text-slate-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 <span class="text-[10px] font-bold">Games</span>
             </button>
             <button id="nav-match" class="flex flex-col items-center space-y-0.5 py-1 px-3 rounded-xl transition-all relative text-slate-400">
@@ -466,18 +481,22 @@
     
     <!-- BUSINESS LOGIC ENGINE -->
     <script>
-        // Core Starting Team Template
+        // Core Starting Team Template preloaded with your exact roster
         const DEFAULT_PLAYERS = [
-            { id: 'p1', name: 'Alex M.', number: '10', isGoalieEligible: true, neverGoalie: false, history: { OL: 4, OM: 3, OR: 2, DL: 5, DM: 4, DR: 3, GK: 1, Bench: 8 }, goals: 3, present: true },
-            { id: 'p2', name: 'Ben J.', number: '7', isGoalieEligible: false, neverGoalie: false, history: { OL: 5, OM: 4, OR: 5, DL: 2, DM: 3, DR: 2, GK: 0, Bench: 8 }, goals: 5, present: true },
-            { id: 'p3', name: 'Charlie K.', number: '1', isGoalieEligible: true, neverGoalie: false, history: { OL: 2, OM: 2, OR: 3, DL: 6, DM: 7, DR: 5, GK: 2, Bench: 8 }, goals: 1, present: true },
-            { id: 'p4', name: 'Dani S.', number: '9', isGoalieEligible: false, neverGoalie: true, history: { OL: 6, OM: 7, OR: 5, DL: 1, DM: 2, DR: 2, GK: 0, Bench: 8 }, goals: 8, present: true },
-            { id: 'p5', name: 'Emma L.', number: '11', isGoalieEligible: false, neverGoalie: false, history: { OL: 3, OM: 4, OR: 4, DL: 4, DM: 5, DR: 5, GK: 0, Bench: 8 }, goals: 2, present: true },
-            { id: 'p6', name: 'Frankie B.', number: '4', isGoalieEligible: false, neverGoalie: false, history: { OL: 4, OM: 3, OR: 5, DL: 4, DM: 3, DR: 4, GK: 0, Bench: 8 }, goals: 3, present: true },
-            { id: 'p7', name: 'Grace T.', number: '3', isGoalieEligible: false, neverGoalie: false, history: { OL: 5, OM: 5, OR: 6, DL: 2, DM: 2, DR: 3, GK: 0, Bench: 8 }, goals: 4, present: true },
-            { id: 'p8', name: 'Henry W.', number: '22', isGoalieEligible: true, neverGoalie: false, history: { OL: 2, OM: 2, OR: 1, DL: 5, DM: 6, DR: 5, GK: 3, Bench: 8 }, goals: 0, present: true },
-            { id: 'p9', name: 'Isabella C.', number: '8', isGoalieEligible: false, neverGoalie: false, history: { OL: 4, OM: 5, OR: 4, DL: 3, DM: 4, DR: 4, GK: 0, Bench: 8 }, goals: 2, present: true },
-            { id: 'p10', name: 'Jack R.', number: '5', isGoalieEligible: false, neverGoalie: false, history: { OL: 5, OM: 4, OR: 3, DL: 4, DM: 4, DR: 4, GK: 0, Bench: 8 }, goals: 3, present: true }
+            { id: 'p1', name: 'Adele', number: '6', isGoalieEligible: true, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p2', name: 'Alice', number: '3', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p3', name: 'Arina', number: '7', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p4', name: 'Charlie', number: '35', isGoalieEligible: true, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p5', name: 'Gabriella', number: '11', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p6', name: 'Hailey', number: '8', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p7', name: 'Kaitlin', number: '12', isGoalieEligible: true, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p8', name: 'Maria', number: '5', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p9', name: 'Nalia', number: '14', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p10', name: 'Olivia', number: '9', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p11', name: 'Rhiain', number: '10', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p12', name: 'Rosalie', number: '13', isGoalieEligible: true, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p13', name: 'Willow', number: '2', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p14', name: 'Zoe', number: '4', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true }
         ];
         
         let players = [];
@@ -902,6 +921,11 @@
                 }
             }
 
+            // Create playedOutfield dynamic tracker for this game run
+            const goaliesToday = new Set(game.selectedGoalies.filter(Boolean));
+            const playedOutfield = {};
+            presentPlayers.forEach(p => { playedOutfield[p.id] = 0; });
+
             const computedLineup = [];
             for (let t = 0; t < S; t++) {
                 const qIdx = Math.floor(t / Sq);
@@ -910,11 +934,56 @@
                 // Exclude active goalkeeper from benched candidates for this shift
                 const candidates = presentPlayers.filter(p => p.id !== goalieId);
                 
-                // Sort candidates to decide who benches: Lowest (Career Bench + Active Game Bench) sits
+                // Sort candidates to decide who benches: Lowest score sits.
                 candidates.sort((a, b) => {
                     const benchA = a.history && a.history.Bench ? a.history.Bench : 0;
                     const benchB = b.history && b.history.Bench ? b.history.Bench : 0;
-                    return (benchA + currentBenchInThisGame[a.id]) - (benchB + currentBenchInThisGame[b.id]);
+
+                    // Consecutive Shift Spacer: If they benched in the immediate previous shift, 
+                    // add a massive virtual score bonus so they are guaranteed to play on-field now.
+                    const satLastShiftA = (t > 0 && computedLineup[t-1].Bench.includes(a.id)) ? 1000 : 0;
+                    const satLastShiftB = (t > 0 && computedLineup[t-1].Bench.includes(b.id)) ? 1000 : 0;
+
+                    // --- ENHANCED DYNAMIC GOALIE ON-FIELD MINIMUM GUARANTEE SOLVER ---
+                    // Force goalies to play at least 3 outfield shifts
+                    let boostA = 0;
+                    if (goaliesToday.has(a.id)) {
+                        const neededA = 3 - (playedOutfield[a.id] || 0);
+                        if (neededA > 0) {
+                            let remainingEligibleA = 0;
+                            for (let r = t; r < S; r++) {
+                                const rQ = Math.floor(r / Sq);
+                                if (game.selectedGoalies[rQ] !== a.id) remainingEligibleA++;
+                            }
+                            if (remainingEligibleA <= neededA) {
+                                boostA = 5000; // Must play outfielder
+                            } else {
+                                boostA = neededA * 150; // Proactively prioritize outfield play
+                            }
+                        }
+                    }
+
+                    let boostB = 0;
+                    if (goaliesToday.has(b.id)) {
+                        const neededB = 3 - (playedOutfield[b.id] || 0);
+                        if (neededB > 0) {
+                            let remainingEligibleB = 0;
+                            for (let r = t; r < S; r++) {
+                                const rQ = Math.floor(r / Sq);
+                                if (game.selectedGoalies[rQ] !== b.id) remainingEligibleB++;
+                            }
+                            if (remainingEligibleB <= neededB) {
+                                boostB = 5000; // Must play outfielder
+                            } else {
+                                boostB = neededB * 150; // Proactively prioritize outfield play
+                            }
+                        }
+                    }
+
+                    const scoreA = benchA + currentBenchInThisGame[a.id] + satLastShiftA + boostA;
+                    const scoreB = benchB + currentBenchInThisGame[b.id] + satLastShiftB + boostB;
+
+                    return scoreA - scoreB;
                 });
                 const benchCountForThisShift = N - 7;
                 const benchedIds = candidates.slice(0, benchCountForThisShift).map(p => p.id);
@@ -922,10 +991,16 @@
                 const activeFieldIds = candidates.slice(benchCountForThisShift).map(p => p.id);
                 const fieldPlayers = presentPlayers.filter(p => activeFieldIds.includes(p.id));
                 
+                // Track outfield plays so that the guarantee solver counts them properly
+                activeFieldIds.forEach(id => {
+                    playedOutfield[id] = (playedOutfield[id] || 0) + 1;
+                });
+
                 fieldPlayers.sort((a, b) => {
-                    // Include the player's TOTAL goalie shifts for today as a massive defensive weight
-                    const gameDefA = activeDefenseCounts[a.id] + totalGameGkShifts[a.id];
-                    const gameDefB = activeDefenseCounts[b.id] + totalGameGkShifts[b.id];
+                    // Include the player's TOTAL goalie shifts for today with a 0.5 multiplier.
+                    // This counts 2 goalie shifts as exactly 1 defensive shift for outfield position balancing.
+                    const gameDefA = activeDefenseCounts[a.id] + (totalGameGkShifts[a.id] || 0) * 0.5;
+                    const gameDefB = activeDefenseCounts[b.id] + (totalGameGkShifts[b.id] || 0) * 0.5;
                     
                     const gameDiffA = activeOffenseCounts[a.id] - gameDefA;
                     const gameDiffB = activeOffenseCounts[b.id] - gameDefB;
@@ -935,13 +1010,13 @@
                         return gameDiffA - gameDiffB;
                     }
                     
-                    // 2. If tied today, use lifetime history as the tie-breaker (treating historical GK as Def)
+                    // 2. If tied today, use lifetime history as the tie-breaker (treating historical GK as 0.5 Def)
                     const histOffA = (a.history?.OL || 0) + (a.history?.OM || 0) + (a.history?.OR || 0);
-                    const histDefA = (a.history?.DL || 0) + (a.history?.DM || 0) + (a.history?.DR || 0) + (a.history?.GK || 0);
+                    const histDefA = (a.history?.DL || 0) + (a.history?.DM || 0) + (a.history?.DR || 0) + ((a.history?.GK || 0) * 0.5);
                     const histDiffA = histOffA - histDefA;
 
                     const histOffB = (b.history?.OL || 0) + (b.history?.OM || 0) + (b.history?.OR || 0);
-                    const histDefB = (b.history?.DL || 0) + (b.history?.DM || 0) + (b.history?.DR || 0) + (b.history?.GK || 0);
+                    const histDefB = (b.history?.DL || 0) + (b.history?.DM || 0) + (b.history?.DR || 0) + ((b.history?.GK || 0) * 0.5);
                     const histDiffB = histOffB - histDefB;
 
                     // Sort players lacking historical offense to the front of the list
@@ -1072,9 +1147,11 @@
                                 else if (shift.OM === p.id && activeStats.OM > 0) activeStats.OM--;
                                 else if (shift.OR === p.id && activeStats.OR > 0) activeStats.OR--;
                                 else if (shift.DL === p.id && activeStats.DL > 0) activeStats.DL--;
-                                else if (shift.DM === p.id && activeStats.DM > 0) activeStats.DM--;
-                                else if (shift.DR === p.id && activeStats.DR > 0) activeStats.DR--;
-                                else if (shift.Bench && shift.Bench.includes(p.id) && activeStats.Bench > 0) activeStats.Bench--;
+                                {
+                                    if (shift.DM === p.id && activeStats.DM > 0) activeStats.DM--;
+                                    else if (shift.DR === p.id && activeStats.DR > 0) activeStats.DR--;
+                                }
+                                if (shift.Bench && shift.Bench.includes(p.id) && activeStats.Bench > 0) activeStats.Bench--;
                             });
                             
                             // Revert goals scored in this game
@@ -1269,6 +1346,11 @@
             document.getElementById('match-countdown-digits').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
+        document.getElementById('save-player-btn').addEventListener('click', () => {
+            // Force save and sync roster
+            saveRoster();
+        });
+
         function startTimer() {
             if (timerInterval) clearInterval(timerInterval);
             timerInterval = setInterval(() => {
@@ -1364,11 +1446,102 @@
             });
             
             safeBindClick('load-demo-btn', () => {
-                triggerConfirmation("Load Demo Team?", "This will overwrite your existing roster with template players.", () => {
+                triggerConfirmation("Load Default Team?", "This will overwrite your existing roster with your preset core team configurations.", () => {
                     players = DEFAULT_PLAYERS;
                     saveRoster();
                     renderRoster();
                 });
+            });
+
+            // --- EXPORT ROSTER BUTTON ---
+            safeBindClick('export-team-btn', () => {
+                document.getElementById('import-export-title').innerText = "📤 Export Roster Code";
+                const helpEl = document.getElementById('import-export-help');
+                helpEl.innerText = "Copy the code below. You can send this code to your phone (via text/email) and import it there!";
+                helpEl.className = "text-xs text-slate-400 text-center leading-relaxed animate-fade-in";
+                
+                const rosterStr = JSON.stringify(players.map(p => ({
+                    name: p.name,
+                    number: p.number,
+                    isGoalieEligible: p.isGoalieEligible,
+                    neverGoalie: p.neverGoalie,
+                    history: p.history || { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 },
+                    goals: p.goals || 0,
+                    present: p.present !== undefined ? p.present : true
+                })));
+                
+                try {
+                    const base64Code = btoa(unescape(encodeURIComponent(rosterStr)));
+                    document.getElementById('import-export-textarea').value = base64Code;
+                    
+                    const actionBtn = document.getElementById('action-import-export-btn');
+                    actionBtn.innerText = "Copy Code";
+                    actionBtn.className = "flex-1 bg-emerald-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs active:scale-95 transition-all";
+                    
+                    actionBtn.onclick = () => {
+                        const textarea = document.getElementById('import-export-textarea');
+                        textarea.select();
+                        textarea.setSelectionRange(0, 99999); // iOS selection
+                        document.execCommand('copy');
+                        actionBtn.innerText = "Copied! ✓";
+                        setTimeout(() => { actionBtn.innerText = "Copy Code"; }, 2000);
+                    };
+                    
+                    document.getElementById('modal-import-export').classList.remove('hidden');
+                } catch(e) {
+                    console.error(e);
+                }
+            });
+
+            // --- IMPORT ROSTER BUTTON ---
+            safeBindClick('import-team-btn', () => {
+                document.getElementById('import-export-title').innerText = "📥 Import Roster Code";
+                const helpEl = document.getElementById('import-export-help');
+                helpEl.innerText = "Paste your exported roster code here to immediately load your core squad configuration.";
+                helpEl.className = "text-xs text-slate-400 text-center leading-relaxed animate-fade-in";
+                
+                const textarea = document.getElementById('import-export-textarea');
+                textarea.value = "";
+                
+                const actionBtn = document.getElementById('action-import-export-btn');
+                actionBtn.innerText = "Import Roster";
+                actionBtn.className = "flex-1 bg-emerald-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs active:scale-95 transition-all";
+                
+                actionBtn.onclick = () => {
+                    const val = textarea.value.trim();
+                    if (!val) return;
+                    try {
+                        const rawStr = decodeURIComponent(escape(atob(val)));
+                        const imported = JSON.parse(rawStr);
+                        if (Array.isArray(imported)) {
+                            players = imported.map((p, idx) => ({
+                                id: p.id || 'p_' + (Date.now() + idx),
+                                name: p.name || 'Unnamed',
+                                number: p.number || '0',
+                                isGoalieEligible: !!p.isGoalieEligible,
+                                neverGoalie: !!p.neverGoalie,
+                                history: p.history || { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 },
+                                goals: p.goals || 0,
+                                present: p.present !== undefined ? p.present : true
+                            }));
+                            saveRoster();
+                            renderRoster();
+                            document.getElementById('modal-import-export').classList.add('hidden');
+                        } else {
+                            helpEl.innerText = "Error: Invalid code format. Try copying again.";
+                            helpEl.className = "text-xs text-red-400 text-center leading-relaxed font-bold animate-pulse";
+                        }
+                    } catch(e) {
+                        helpEl.innerText = "Error: Failed to parse. Ensure you copied the entire string.";
+                        helpEl.className = "text-xs text-red-400 text-center leading-relaxed font-bold animate-pulse";
+                    }
+                };
+                
+                document.getElementById('modal-import-export').classList.remove('hidden');
+            });
+
+            safeBindClick('close-import-export-btn', () => {
+                document.getElementById('modal-import-export').classList.add('hidden');
             });
             
             safeBindClick('clear-roster-btn', () => {
@@ -1543,7 +1716,6 @@
                         if (idx1 !== -1 && idx2 === -1) {
                             shift.Bench[idx1] = p2Id;
                         } else if (idx2 !== -1 && idx1 !== -1) {
-                            // both are in benched array, swap index positions
                             shift.Bench[idx1] = p2Id;
                             shift.Bench[idx2] = p1Id;
                         } else if (idx2 !== -1 && idx1 === -1) {
@@ -1617,7 +1789,7 @@
             benchScorersGrid.innerHTML = '';
             const benchPlayers = players.filter(p => game.attendance[p.id] && !activeOnField.some(on => on.id === p.id));
             if (benchPlayers.length === 0) {
-                benchScorersGrid.innerHTML = `<p class="text-xs text-slate-500 italic text-center py-2">No benched substitutes.</p>`;
+                benchScorersGrid.innerHTML = `<p class="text-xs text-slate-555 italic text-center py-2">No benched substitutes.</p>`;
             } else {
                 benchPlayers.forEach(p => {
                     const btn = document.createElement('button');
