@@ -502,8 +502,8 @@
             { id: 'p3', name: 'Arina', number: '7', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
             { id: 'p4', name: 'Charlie', number: '35', isGoalieEligible: true, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
             { id: 'p5', name: 'Gabriella', number: '11', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p6', name: 'Hailey', number: '8', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p7', name: 'Kaitlin', number: '12', isGoalieEligible: true, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p6', name: 'Hailey', number: '8', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p7', name: 'Kaitlin', number: '12', isGoalieEligible: true, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
             { id: 'p8', name: 'Maria', number: '5', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
             { id: 'p9', name: 'Nalia', number: '14', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
             { id: 'p10', name: 'Olivia', number: '9', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
@@ -976,59 +976,6 @@
                 
                 // Exclude active goalkeeper from benched candidates for this shift
                 const candidates = presentPlayers.filter(p => p.id !== goalieId);
-                
-                // Sort candidates to decide who benches: Lowest score sits.
-                // Goalkeepers receive exactly the same real benching time as outfielders.
-                candidates.sort((a, b) => {
-                    const benchA = a.history && a.history.Bench ? a.history.Bench : 0;
-                    const benchB = b.history && b.history.Bench ? b.history.Bench : 0;
-
-                    // Consecutive Shift Spacer: If they benched in the immediate previous shift, 
-                    // add a massive virtual score bonus so they are guaranteed to play on-field now.
-                    const satLastShiftA = (t > 0 && computedLineup[t-1].Bench.includes(a.id)) ? 1000 : 0;
-                    const satLastShiftB = (t > 0 && computedLineup[t-1].Bench.includes(b.id)) ? 1000 : 0;
-
-                    // --- ENHANCED DYNAMIC GOALIE ON-FIELD MINIMUM GUARANTEE SOLVER ---
-                    // Force goalies to play at least 3 outfield shifts
-                    let boostA = 0;
-                    if (goaliesToday.has(a.id)) {
-                        const neededA = 3 - (playedOutfield[a.id] || 0);
-                        if (neededA > 0) {
-                            let remainingEligibleA = 0;
-                            for (let r = t; r < S; r++) {
-                                const rQ = Math.floor(r / Sq);
-                                if (game.selectedGoalies[rQ] !== a.id) remainingEligibleA++;
-                            }
-                            if (remainingEligibleA <= neededA) {
-                                boostA = 5000; // Must play outfielder
-                            } else {
-                                boostA = neededA * 150; // Proactively prioritize outfield play
-                            }
-                        }
-                    }
-
-                    let boostB = 0;
-                    if (goaliesToday.has(b.id)) {
-                        const neededB = 3 - (playedOutfield[b.id] || 0);
-                        if (neededB > 0) {
-                            let remainingEligibleB = 0;
-                            for (let r = t; r < S; r++) {
-                                const rQ = Math.floor(r / Sq);
-                                if (game.selectedGoalies[rQ] !== b.id) remainingEligibleB++;
-                            }
-                            if (remainingEligibleB <= neededB) {
-                                boostB = 5000; // Must play outfielder
-                            } else {
-                                boostB = neededB * 150; // Proactively prioritize outfield play
-                            }
-                        }
-                    }
-
-                    const scoreA = benchA + currentBenchInThisGame[a.id] + satLastShiftA + boostA;
-                    const scoreB = benchB + currentBenchInThisGame[b.id] + satLastShiftB + boostB;
-
-                    return scoreA - scoreB;
-                });
 
                 // Adjust scores for teammates paired together
                 const adjustedScores = {};
@@ -1120,6 +1067,106 @@
                     // Sort players lacking historical offense to the front of the list
                     return histDiffA - histDiffB;
                 });
+                
+                // --- PAIR LINE ALIGNMENT ADJUSTMENT ---
+                // Ensure paired players play on the same line (offense together, defense together)
+                const processedPairs = new Set();
+                for (let i = 0; i < fieldPlayers.length; i++) {
+                    const p1 = fieldPlayers[i];
+                    if (p1.pairedWith && !processedPairs.has(p1.id)) {
+                        // Find if partner is also playing on-field in this shift
+                        const partnerIdx = fieldPlayers.findIndex(x => x.id === p1.pairedWith);
+                        if (partnerIdx !== -1) {
+                            const p2 = fieldPlayers[partnerIdx];
+                            processedPairs.add(p1.id);
+                            processedPairs.add(p2.id);
+
+                            const idx1 = i;
+                            const idx2 = partnerIdx;
+
+                            const line1 = idx1 < 3 ? 'OFF' : 'DEF';
+                            const line2 = idx2 < 3 ? 'OFF' : 'DEF';
+
+                            if (line1 !== line2) {
+                                // Players are on different lines, we need to reunite them!
+                                const offenseA = activeOffenseCounts[p1.id] || 0;
+                                const offenseB = activeOffenseCounts[p2.id] || 0;
+                                const defenseA = activeDefenseCounts[p1.id] || 0;
+                                const defenseB = activeDefenseCounts[p2.id] || 0;
+                                const prefA = p1.prefersDefense ? 1.5 : 0;
+                                const prefB = p2.prefersDefense ? 1.5 : 0;
+
+                                const gameDiffA = offenseA - (defenseA + prefA);
+                                const gameDiffB = offenseB - (defenseB + prefB);
+                                const avgDiff = (gameDiffA + gameDiffB) / 2;
+
+                                if (avgDiff <= 0) {
+                                    // Both should play Offense (indices 0, 1, 2)
+                                    // The one in Defense needs to be swapped into Offense.
+                                    const defPlayerIdx = idx1 >= 3 ? idx1 : idx2;
+                                    const offPlayerIdx = idx1 < 3 ? idx1 : idx2;
+
+                                    // Find a swap candidate in Offense (0, 1, 2) who is NOT the partner,
+                                    // and ideally is not part of another active pair.
+                                    let swapCandidates = [];
+                                    for (let k = 0; k < 3; k++) {
+                                        const candidate = fieldPlayers[k];
+                                        if (candidate.id !== fieldPlayers[offPlayerIdx].id) {
+                                            const partnerIsPlaying = candidate.pairedWith && fieldPlayers.some(x => x.id === candidate.pairedWith);
+                                            if (!partnerIsPlaying) {
+                                                swapCandidates.push(k);
+                                            }
+                                        }
+                                    }
+                                    if (swapCandidates.length === 0) {
+                                        for (let k = 0; k < 3; k++) {
+                                            if (fieldPlayers[k].id !== fieldPlayers[offPlayerIdx].id) {
+                                                swapCandidates.push(k);
+                                            }
+                                        }
+                                    }
+
+                                    if (swapCandidates.length > 0) {
+                                        const swapIdx = swapCandidates[0];
+                                        const temp = fieldPlayers[swapIdx];
+                                        fieldPlayers[swapIdx] = fieldPlayers[defPlayerIdx];
+                                        fieldPlayers[defPlayerIdx] = temp;
+                                    }
+                                } else {
+                                    // Both should play Defense (indices 3, 4, 5)
+                                    // The one in Offense needs to be swapped into Defense.
+                                    const offPlayerIdx = idx1 < 3 ? idx1 : idx2;
+                                    const defPlayerIdx = idx1 >= 3 ? idx1 : idx2;
+
+                                    let swapCandidates = [];
+                                    for (let k = 3; k < 6; k++) {
+                                        const candidate = fieldPlayers[k];
+                                        if (candidate.id !== fieldPlayers[defPlayerIdx].id) {
+                                            const partnerIsPlaying = candidate.pairedWith && fieldPlayers.some(x => x.id === candidate.pairedWith);
+                                            if (!partnerIsPlaying) {
+                                                swapCandidates.push(k);
+                                            }
+                                        }
+                                    }
+                                    if (swapCandidates.length === 0) {
+                                        for (let k = 3; k < 6; k++) {
+                                            if (fieldPlayers[k].id !== fieldPlayers[defPlayerIdx].id) {
+                                                swapCandidates.push(k);
+                                            }
+                                        }
+                                    }
+
+                                    if (swapCandidates.length > 0) {
+                                        const swapIdx = swapCandidates[0];
+                                        const temp = fieldPlayers[swapIdx];
+                                        fieldPlayers[swapIdx] = fieldPlayers[offPlayerIdx];
+                                        fieldPlayers[offPlayerIdx] = temp;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 
                 const offenseGroup = fieldPlayers.slice(0, 3);
                 const defenseGroup = fieldPlayers.slice(3, 6);
