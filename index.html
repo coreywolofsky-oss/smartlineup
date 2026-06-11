@@ -404,7 +404,7 @@
         </div>
     </div>
 
-    <!-- PAST GAME DETAILS MODAL -->
+    <!-- PAST GAME DETAILS MODAL with Delete Action -->
     <div id="modal-past-game" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-scale-up">
         <div class="bg-slate-800 border border-slate-700 rounded-3xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
             <div class="p-4 border-b border-slate-700 bg-slate-800 z-20 flex justify-between items-center sticky top-0">
@@ -430,8 +430,13 @@
                 </div>
             </div>
             
-            <div class="p-4 border-t border-slate-700 bg-slate-850">
-                <button type="button" id="close-past-game-btn" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl text-xs transition-colors">Close Archives</button>
+            <div class="p-4 border-t border-slate-700 bg-slate-850 flex gap-2">
+                <button type="button" id="delete-past-game-btn" class="flex-1 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 font-bold py-3 rounded-xl text-xs transition-colors flex items-center justify-center gap-1">
+                    🗑️ Delete Game
+                </button>
+                <button type="button" id="close-past-game-btn" class="flex-1 bg-slate-700 hover:bg-slate-650 text-white font-bold py-3 rounded-xl text-xs transition-colors">
+                    Close Archives
+                </button>
             </div>
         </div>
     </div>
@@ -568,6 +573,8 @@
             document.getElementById('past-game-title').innerText = "vs " + game.opponent;
             document.getElementById('past-game-date').innerText = game.date;
             document.getElementById('past-game-score').innerText = `${game.homeScore || 0} - ${game.awayScore || 0}`;
+            
+            document.getElementById('delete-past-game-btn').setAttribute('data-id', gameId);
             
             const goalsList = document.getElementById('past-game-goals-list');
             goalsList.innerHTML = '';
@@ -724,8 +731,23 @@
                                 <span class="text-xs text-emerald-400 font-mono font-bold block mt-1">${game.date}</span>
                                 <span class="text-[10px] text-slate-400 mt-0.5 block">${game.quartersCount} Quarters • ${game.shiftsPerQuarter} Shifts</span>
                             </div>
-                            <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider ${game.status === 'Active' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'}">${game.status}</span>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider ${game.status === 'Active' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'}">${game.status}</span>
+                                <button class="delete-active-game-btn p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl transition-all" data-id="${game.id}">🗑️</button>
+                            </div>
                         `;
+                        
+                        card.querySelector('.delete-active-game-btn').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const gId = e.currentTarget.getAttribute('data-id');
+                            triggerConfirmation("Delete Game Setup?", "This will permanently remove this game card from your hub.", () => {
+                                if (activeGameId === gId) activeGameId = null;
+                                games = games.filter(g => g.id !== gId);
+                                saveGames();
+                                renderGamesHub();
+                            });
+                        });
+
                         card.addEventListener('click', () => { activeGameId = game.id; renderGamesHub(); });
                         listContainer.appendChild(card);
                     });
@@ -1027,6 +1049,70 @@
                 `;
                 container.appendChild(card);
             });
+        }
+
+        // --- HARD ROLLBACK & DELETE GAME RECORD ---
+        function handleDeletePastGame(gameId) {
+            const game = games.find(g => g.id === gameId);
+            if (!game) return;
+
+            triggerConfirmation(
+                "Delete Game Record?",
+                "This will permanently delete this game's logs and reverse all historical shifts/goals added to your players' lifetime stats.",
+                () => {
+                    // Reverse statistics addition if it was completed
+                    if (game.status === 'Completed' && game.lineup) {
+                        players = players.map(p => {
+                            const activeStats = { ...p.history };
+                            
+                            // Subtract the shifts recorded in this archived game
+                            game.lineup.forEach(shift => {
+                                if (shift.GK === p.id && activeStats.GK > 0) activeStats.GK--;
+                                else if (shift.OL === p.id && activeStats.OL > 0) activeStats.OL--;
+                                else if (shift.OM === p.id && activeStats.OM > 0) activeStats.OM--;
+                                else if (shift.OR === p.id && activeStats.OR > 0) activeStats.OR--;
+                                else if (shift.DL === p.id && activeStats.DL > 0) activeStats.DL--;
+                                else if (shift.DM === p.id && activeStats.DM > 0) activeStats.DM--;
+                                else if (shift.DR === p.id && activeStats.DR > 0) activeStats.DR--;
+                                else if (shift.Bench && shift.Bench.includes(p.id) && activeStats.Bench > 0) activeStats.Bench--;
+                            });
+                            
+                            // Revert goals scored in this game
+                            let goalsInGame = 0;
+                            if (game.goalEvents) {
+                                game.goalEvents.forEach(evt => {
+                                    if (evt.scorerId === p.id) {
+                                        goalsInGame++;
+                                    }
+                                });
+                            }
+                            const newGoals = Math.max(0, (p.goals || 0) - goalsInGame);
+
+                            return { ...p, history: activeStats, goals: newGoals };
+                        });
+                        
+                        saveRoster();
+                    }
+
+                    // Reset current match state pointer if we deleted the currently active game
+                    if (activeGameId === gameId) {
+                        activeGameId = null;
+                    }
+
+                    // Remove game from storage
+                    games = games.filter(g => g.id !== gameId);
+                    saveGames();
+
+                    // Hide modal
+                    document.getElementById('modal-past-game').classList.add('hidden');
+                    
+                    // Re-render
+                    renderRoster();
+                    renderGamesHub();
+                    renderHistoryLogs();
+                    updateTabNavigation('logs');
+                }
+            );
         }
 
         function renderMatchTab() {
@@ -1394,6 +1480,11 @@
             
             safeBindClick('close-past-game-btn', () => { document.getElementById('modal-past-game').classList.add('hidden'); });
 
+            safeBindClick('delete-past-game-btn', () => {
+                const gameId = document.getElementById('delete-past-game-btn').getAttribute('data-id');
+                handleDeletePastGame(gameId);
+            });
+
             safeBindClick('confirm-cancel-btn', () => {
                 document.getElementById('modal-confirm').classList.add('hidden');
                 confirmActionCallback = null;
@@ -1451,6 +1542,10 @@
                         const idx2 = shift.Bench.indexOf(p2Id);
                         if (idx1 !== -1 && idx2 === -1) {
                             shift.Bench[idx1] = p2Id;
+                        } else if (idx2 !== -1 && idx1 !== -1) {
+                            // both are in benched array, swap index positions
+                            shift.Bench[idx1] = p2Id;
+                            shift.Bench[idx2] = p1Id;
                         } else if (idx2 !== -1 && idx1 === -1) {
                             shift.Bench[idx2] = p1Id;
                         }
