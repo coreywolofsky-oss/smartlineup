@@ -68,6 +68,16 @@
                         <input id="player-never-gk-input" type="checkbox" class="rounded bg-slate-800 border-slate-700 text-red-500">
                         <span class="text-red-300">Never Goalie (Exclude from GK Suggestions)</span>
                     </label>
+                    <label class="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer">
+                        <input id="player-prefers-defense-input" type="checkbox" class="rounded bg-slate-800 border-slate-700 text-blue-500">
+                        <span class="text-blue-300">Prefers Defense (Prioritize Defense shifts)</span>
+                    </label>
+                </div>
+                <div class="pt-1">
+                    <label class="block text-[10px] text-slate-400 font-bold mb-1 uppercase">Pair Field Play with</label>
+                    <select id="player-pair-input" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-2 py-1.5 text-xs text-white focus:outline-none">
+                        <option value="">-- No Pairing --</option>
+                    </select>
                 </div>
                 <div class="pt-2 flex justify-end space-x-2">
                     <button type="button" id="cancel-edit-btn" class="hidden bg-slate-700 text-slate-300 text-xs px-3 py-2 rounded-xl">Cancel</button>
@@ -352,14 +362,18 @@
                 <p class="text-xs text-emerald-400 font-medium">Lifetime Position Distribution</p>
             </div>
             <div class="bg-slate-900/60 rounded-2xl p-3 border border-slate-750 text-xs text-slate-300 space-y-3">
-                <div class="grid grid-cols-2 gap-2 text-center">
-                    <div class="bg-slate-800 p-2.5 rounded-xl border border-slate-750">
-                        <span class="text-[10px] text-slate-400 block uppercase">Goalie Starts</span>
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="bg-slate-800 p-2 rounded-xl border border-slate-750">
+                        <span class="text-[9px] text-slate-400 block uppercase">Goalie Starts</span>
                         <span id="stats-gk-starts" class="text-sm font-bold text-yellow-300">0</span>
                     </div>
-                    <div class="bg-slate-800 p-2.5 rounded-xl border border-slate-750">
-                        <span class="text-[10px] text-slate-400 block uppercase">Off Shift Bench</span>
+                    <div class="bg-slate-800 p-2 rounded-xl border border-slate-750">
+                        <span class="text-[9px] text-slate-400 block uppercase">Bench Shifts</span>
                         <span id="stats-bench-shifts" class="text-sm font-bold text-slate-400">0</span>
+                    </div>
+                    <div class="bg-slate-800 p-2 rounded-xl border border-slate-750">
+                        <span class="text-[9px] text-slate-400 block uppercase">Season Goals</span>
+                        <span id="stats-goals" class="text-sm font-bold text-emerald-400">0</span>
                     </div>
                 </div>
                 <div class="space-y-1.5 border-t border-slate-850 pt-2.5">
@@ -464,7 +478,7 @@
                 <span class="text-[10px] font-bold">Roster</span>
             </button>
             <button id="nav-games" class="flex flex-col items-center space-y-0.5 py-1 px-3 rounded-xl transition-all text-slate-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                 <span class="text-[10px] font-bold">Games</span>
             </button>
             <button id="nav-match" class="flex flex-col items-center space-y-0.5 py-1 px-3 rounded-xl transition-all relative text-slate-400">
@@ -481,22 +495,22 @@
     
     <!-- BUSINESS LOGIC ENGINE -->
     <script>
-        // Core Starting Team Template preloaded with your exact roster
+        // Core Starting Team Template preloaded with your exact roster and initial goalie setups
         const DEFAULT_PLAYERS = [
-            { id: 'p1', name: 'Adele', number: '6', isGoalieEligible: true, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p2', name: 'Alice', number: '3', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p3', name: 'Arina', number: '7', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p4', name: 'Charlie', number: '35', isGoalieEligible: true, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p5', name: 'Gabriella', number: '11', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p6', name: 'Hailey', number: '8', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p7', name: 'Kaitlin', number: '12', isGoalieEligible: true, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p8', name: 'Maria', number: '5', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p9', name: 'Nalia', number: '14', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p10', name: 'Olivia', number: '9', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p11', name: 'Rhiain', number: '10', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p12', name: 'Rosalie', number: '13', isGoalieEligible: true, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p13', name: 'Willow', number: '2', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
-            { id: 'p14', name: 'Zoe', number: '4', isGoalieEligible: false, neverGoalie: false, history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true }
+            { id: 'p1', name: 'Adele', number: '6', isGoalieEligible: true, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p2', name: 'Alice', number: '3', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p3', name: 'Arina', number: '7', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p4', name: 'Charlie', number: '35', isGoalieEligible: true, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p5', name: 'Gabriella', number: '11', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p6', name: 'Hailey', number: '8', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p7', name: 'Kaitlin', number: '12', isGoalieEligible: true, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p8', name: 'Maria', number: '5', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p9', name: 'Nalia', number: '14', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p10', name: 'Olivia', number: '9', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p11', name: 'Rhiain', number: '10', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p12', name: 'Rosalie', number: '13', isGoalieEligible: true, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p13', name: 'Willow', number: '2', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true },
+            { id: 'p14', name: 'Zoe', number: '4', isGoalieEligible: false, neverGoalie: false, prefersDefense: false, pairedWith: '', history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true }
         ];
         
         let players = [];
@@ -520,6 +534,20 @@
             }
         }
 
+        function populatePairDropdown(excludePlayerId) {
+            const select = document.getElementById('player-pair-input');
+            if (!select) return;
+            select.innerHTML = '<option value="">-- No Pairing --</option>';
+            players.forEach(p => {
+                if (p.id !== excludePlayerId) {
+                    const opt = document.createElement('option');
+                    opt.value = p.id;
+                    opt.innerText = `#${p.number} ${p.name}`;
+                    select.appendChild(opt);
+                }
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const savedPlayers = localStorage.getItem('soccer_players_v6_clean');
             players = savedPlayers ? JSON.parse(savedPlayers) : DEFAULT_PLAYERS;
@@ -527,6 +555,7 @@
             const savedGames = localStorage.getItem('soccer_games_list_v6_clean');
             games = savedGames ? JSON.parse(savedGames) : [];
             document.getElementById('input-date').value = new Date().toISOString().split('T')[0];
+            populatePairDropdown(null);
             renderRoster();
             renderGamesHub();
             updateTabNavigation('roster');
@@ -576,6 +605,7 @@
             document.getElementById('stats-player-name').innerText = p.name;
             document.getElementById('stats-gk-starts').innerText = hist.GK || 0;
             document.getElementById('stats-bench-shifts').innerText = hist.Bench || 0;
+            document.getElementById('stats-goals').innerText = p.goals || 0;
             ['OL', 'OM', 'OR', 'DL', 'DM', 'DR'].forEach(pos => {
                 const element = document.getElementById('stats-' + pos);
                 if (element) {
@@ -667,6 +697,10 @@
                 item.className = 'bg-slate-800 border border-slate-700 rounded-2xl p-3 flex items-center justify-between';
                 const gkBadge = p.isGoalieEligible ? '<span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-emerald-500/20">GK Volunteer</span>' : '';
                 const neverGKBadge = p.neverGoalie ? '<span class="bg-red-500/10 text-red-400 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-red-500/20">Never GK</span>' : '';
+                const prefDefBadge = p.prefersDefense ? '<span class="bg-blue-500/10 text-blue-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-blue-500/20">🛡️ Prefers Def</span>' : '';
+                const partner = p.pairedWith ? players.find(x => x.id === p.pairedWith) : null;
+                const pairBadge = partner ? `<span class="bg-indigo-500/10 text-indigo-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-indigo-500/20">🔗 Paired with ${partner.name}</span>` : '';
+                
                 const bCount = p.history && p.history.Bench ? p.history.Bench : 0;
                 const gkCount = p.history && p.history.GK ? p.history.GK : 0;
                 item.innerHTML = `
@@ -675,12 +709,12 @@
                             <svg class="w-3.5 h-3.5 stroke-[3px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
                         </button>
                         <div>
-                            <div class="font-bold text-white flex items-center gap-1.5 cursor-pointer" onclick="viewPlayerStats('${p.id}')">
+                            <div class="font-bold text-white flex flex-wrap items-center gap-1.5 cursor-pointer" onclick="viewPlayerStats('${p.id}')">
                                 <span class="bg-slate-700/60 text-slate-300 font-mono text-[11px] px-1.5 py-0.5 rounded">#${p.number}</span>
                                 <span class="${p.present ? '' : 'line-through text-slate-600'}">${p.name}</span>
-                                ${gkBadge} ${neverGKBadge}
+                                ${gkBadge} ${neverGKBadge} ${prefDefBadge} ${pairBadge}
                             </div>
-                            <p class="text-[10px] text-slate-400 pl-1">🛋️ ${bCount} Bench • 🥅 ${gkCount} GK shifts historically</p>
+                            <p class="text-[10px] text-slate-400 pl-1 mt-0.5">🛋️ ${bCount} Bench • 🥅 ${gkCount} GK shifts historically</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-1.5">
@@ -708,6 +742,11 @@
                     document.getElementById('player-number-input').value = p.number;
                     document.getElementById('player-gk-input').checked = !!p.isGoalieEligible;
                     document.getElementById('player-never-gk-input').checked = !!p.neverGoalie;
+                    document.getElementById('player-prefers-defense-input').checked = !!p.prefersDefense;
+                    
+                    populatePairDropdown(p.id);
+                    document.getElementById('player-pair-input').value = p.pairedWith || '';
+                    
                     document.getElementById('form-title').innerText = " ✏ ️ Edit Player Profile";
                     document.getElementById('save-player-btn').innerText = "Save Changes";
                     document.getElementById('cancel-edit-btn').classList.remove('hidden');
@@ -717,6 +756,10 @@
                 btn.addEventListener('click', () => {
                     const id = btn.getAttribute('data-id');
                     triggerConfirmation("Delete Player Profile?", "This player will be deleted from your core squad roster forever.", () => {
+                        const toDelete = players.find(x => x.id === id);
+                        if (toDelete && toDelete.pairedWith) {
+                            players = players.map(x => x.id === toDelete.pairedWith ? { ...x, pairedWith: '' } : x);
+                        }
                         players = players.filter(p => p.id !== id);
                         saveRoster();
                         renderRoster();
@@ -934,26 +977,21 @@
                 // Exclude active goalkeeper from benched candidates for this shift
                 const candidates = presentPlayers.filter(p => p.id !== goalieId);
                 
-                // Sort candidates to decide who benches: Lowest score sits.
-                candidates.sort((a, b) => {
-                    const benchA = a.history && a.history.Bench ? a.history.Bench : 0;
-                    const benchB = b.history && b.history.Bench ? b.history.Bench : 0;
+                // 1. Calculate raw prioritisation scores
+                const rawScores = {};
+                candidates.forEach(c => {
+                    const benchA = c.history && c.history.Bench ? c.history.Bench : 0;
+                    const satLastShiftA = (t > 0 && computedLineup[t-1].Bench.includes(c.id)) ? 1000 : 0;
 
-                    // Consecutive Shift Spacer: If they benched in the immediate previous shift, 
-                    // add a massive virtual score bonus so they are guaranteed to play on-field now.
-                    const satLastShiftA = (t > 0 && computedLineup[t-1].Bench.includes(a.id)) ? 1000 : 0;
-                    const satLastShiftB = (t > 0 && computedLineup[t-1].Bench.includes(b.id)) ? 1000 : 0;
-
-                    // --- ENHANCED DYNAMIC GOALIE ON-FIELD MINIMUM GUARANTEE SOLVER ---
-                    // Force goalies to play at least 3 outfield shifts
+                    // Goalkeeper guaranteed on-field play booster
                     let boostA = 0;
-                    if (goaliesToday.has(a.id)) {
-                        const neededA = 3 - (playedOutfield[a.id] || 0);
+                    if (goaliesToday.has(c.id)) {
+                        const neededA = 3 - (playedOutfield[c.id] || 0);
                         if (neededA > 0) {
                             let remainingEligibleA = 0;
                             for (let r = t; r < S; r++) {
                                 const rQ = Math.floor(r / Sq);
-                                if (game.selectedGoalies[rQ] !== a.id) remainingEligibleA++;
+                                if (game.selectedGoalies[rQ] !== c.id) remainingEligibleA++;
                             }
                             if (remainingEligibleA <= neededA) {
                                 boostA = 5000; // Must play outfielder
@@ -963,28 +1001,27 @@
                         }
                     }
 
-                    let boostB = 0;
-                    if (goaliesToday.has(b.id)) {
-                        const neededB = 3 - (playedOutfield[b.id] || 0);
-                        if (neededB > 0) {
-                            let remainingEligibleB = 0;
-                            for (let r = t; r < S; r++) {
-                                const rQ = Math.floor(r / Sq);
-                                if (game.selectedGoalies[rQ] !== b.id) remainingEligibleB++;
-                            }
-                            if (remainingEligibleB <= neededB) {
-                                boostB = 5000; // Must play outfielder
-                            } else {
-                                boostB = neededB * 150; // Proactively prioritize outfield play
-                            }
+                    rawScores[c.id] = benchA + currentBenchInThisGame[c.id] + satLastShiftA + boostA;
+                });
+
+                // 2. Adjust scores for teammates paired together
+                const adjustedScores = { ...rawScores };
+                candidates.forEach(c => {
+                    if (c.pairedWith) {
+                        const partner = candidates.find(x => x.id === c.pairedWith);
+                        if (partner) {
+                            const averageScore = (rawScores[c.id] + rawScores[partner.id]) / 2;
+                            adjustedScores[c.id] = averageScore;
+                            adjustedScores[partner.id] = averageScore;
                         }
                     }
-
-                    const scoreA = benchA + currentBenchInThisGame[a.id] + satLastShiftA + boostA;
-                    const scoreB = benchB + currentBenchInThisGame[b.id] + satLastShiftB + boostB;
-
-                    return scoreA - scoreB;
                 });
+
+                // Sort candidates to decide who benches: Lowest adjusted score sits.
+                candidates.sort((a, b) => {
+                    return adjustedScores[a.id] - adjustedScores[b.id];
+                });
+
                 const benchCountForThisShift = N - 7;
                 const benchedIds = candidates.slice(0, benchCountForThisShift).map(p => p.id);
                 benchedIds.forEach(id => { currentBenchInThisGame[id]++; });
@@ -997,27 +1034,31 @@
                 });
 
                 fieldPlayers.sort((a, b) => {
-                    // Include the player's TOTAL goalie shifts for today with a 0.5 multiplier.
-                    // This counts 2 goalie shifts as exactly 1 defensive shift for outfield position balancing.
+                    // Include the player's TOTAL goalie shifts today with a 0.5 multiplier.
                     const gameDefA = activeDefenseCounts[a.id] + (totalGameGkShifts[a.id] || 0) * 0.5;
                     const gameDefB = activeDefenseCounts[b.id] + (totalGameGkShifts[b.id] || 0) * 0.5;
                     
-                    const gameDiffA = activeOffenseCounts[a.id] - gameDefA;
-                    const gameDiffB = activeOffenseCounts[b.id] - gameDefB;
+                    // --- DYNAMIC DEFENSE PREFERENCE OFFSET ---
+                    // Subtract from their active defense comparison if they prefer defense (makes defense score higher)
+                    const prefersDefOffsetA = a.prefersDefense ? 1.5 : 0;
+                    const prefersDefOffsetB = b.prefersDefense ? 1.5 : 0;
+
+                    const gameDiffA = (activeOffenseCounts[a.id] + prefersDefOffsetA) - gameDefA;
+                    const gameDiffB = (activeOffenseCounts[b.id] + prefersDefOffsetB) - gameDefB;
                     
                     // 1. Balance the current game first (forces players to alternate O and D today)
                     if (gameDiffA !== gameDiffB) {
                         return gameDiffA - gameDiffB;
                     }
                     
-                    // 2. If tied today, use lifetime history as the tie-breaker (treating historical GK as 0.5 Def)
+                    // 2. If tied today, use lifetime history as the tie-breaker
                     const histOffA = (a.history?.OL || 0) + (a.history?.OM || 0) + (a.history?.OR || 0);
                     const histDefA = (a.history?.DL || 0) + (a.history?.DM || 0) + (a.history?.DR || 0) + ((a.history?.GK || 0) * 0.5);
-                    const histDiffA = histOffA - histDefA;
+                    const histDiffA = histOffA - histDefA + (a.prefersDefense ? 10 : 0);
 
                     const histOffB = (b.history?.OL || 0) + (b.history?.OM || 0) + (b.history?.OR || 0);
                     const histDefB = (b.history?.DL || 0) + (b.history?.DM || 0) + (b.history?.DR || 0) + ((b.history?.GK || 0) * 0.5);
-                    const histDiffB = histOffB - histDefB;
+                    const histDiffB = histOffB - histDefB + (b.prefersDefense ? 10 : 0);
 
                     // Sort players lacking historical offense to the front of the list
                     return histDiffA - histDiffB;
@@ -1147,10 +1188,8 @@
                                 else if (shift.OM === p.id && activeStats.OM > 0) activeStats.OM--;
                                 else if (shift.OR === p.id && activeStats.OR > 0) activeStats.OR--;
                                 else if (shift.DL === p.id && activeStats.DL > 0) activeStats.DL--;
-                                {
-                                    if (shift.DM === p.id && activeStats.DM > 0) activeStats.DM--;
-                                    else if (shift.DR === p.id && activeStats.DR > 0) activeStats.DR--;
-                                }
+                                else if (shift.DM === p.id && activeStats.DM > 0) activeStats.DM--;
+                                else if (shift.DR === p.id && activeStats.DR > 0) activeStats.DR--;
                                 if (shift.Bench && shift.Bench.includes(p.id) && activeStats.Bench > 0) activeStats.Bench--;
                             });
                             
@@ -1420,19 +1459,62 @@
                 const number = document.getElementById('player-number-input').value;
                 const isGK = document.getElementById('player-gk-input').checked;
                 const neverGK = document.getElementById('player-never-gk-input').checked;
+                const prefersDef = document.getElementById('player-prefers-defense-input').checked;
+                const pairedId = document.getElementById('player-pair-input').value;
+
                 if (editingPlayerId) {
-                    players = players.map(p => p.id === editingPlayerId ? { ...p, name: name.trim(), number: number.trim(), isGoalieEligible: isGK, neverGoalie: neverGK } : p);
+                    // Clear previous partner pairing pointing to us
+                    const oldPlayerObj = players.find(x => x.id === editingPlayerId);
+                    if (oldPlayerObj && oldPlayerObj.pairedWith) {
+                        players = players.map(x => x.id === oldPlayerObj.pairedWith ? { ...x, pairedWith: '' } : x);
+                    }
+
+                    players = players.map(p => {
+                        if (p.id === editingPlayerId) {
+                            return { 
+                                ...p, 
+                                name: name.trim(), 
+                                number: number.trim(), 
+                                isGoalieEligible: isGK, 
+                                neverGoalie: neverGK,
+                                prefersDefense: prefersDef,
+                                pairedWith: pairedId
+                            };
+                        }
+                        return p;
+                    });
+
+                    // Assign new bidirectional pairing link
+                    if (pairedId) {
+                        players = players.map(x => x.id === pairedId ? { ...x, pairedWith: editingPlayerId } : x);
+                    }
+
                     editingPlayerId = null;
                     document.getElementById('form-title').innerText = "➕ Add Player Profile";
                     document.getElementById('save-player-btn').innerText = "Add Player";
                     document.getElementById('cancel-edit-btn').classList.add('hidden');
                 } else {
+                    const newId = 'p_' + Date.now();
                     players.push({
-                        id: 'p_' + Date.now(), name: name.trim(), number: number.trim(), isGoalieEligible: isGK, neverGoalie: neverGK,
-                        history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, goals: 0, present: true
+                        id: newId, 
+                        name: name.trim(), 
+                        number: number.trim(), 
+                        isGoalieEligible: isGK, 
+                        neverGoalie: neverGK,
+                        prefersDefense: prefersDef,
+                        pairedWith: pairedId,
+                        history: { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 }, 
+                        goals: 0, 
+                        present: true
                     });
+
+                    if (pairedId) {
+                        players = players.map(x => x.id === pairedId ? { ...x, pairedWith: newId } : x);
+                    }
                 }
+                
                 document.getElementById('player-form').reset();
+                populatePairDropdown(null);
                 saveRoster();
                 renderRoster();
             });
@@ -1440,6 +1522,7 @@
             safeBindClick('cancel-edit-btn', () => {
                 editingPlayerId = null;
                 document.getElementById('player-form').reset();
+                populatePairDropdown(null);
                 document.getElementById('form-title').innerText = "➕ Add Player Profile";
                 document.getElementById('save-player-btn').innerText = "Add Player";
                 document.getElementById('cancel-edit-btn').classList.add('hidden');
@@ -1450,6 +1533,7 @@
                     players = DEFAULT_PLAYERS;
                     saveRoster();
                     renderRoster();
+                    populatePairDropdown(null);
                 });
             });
 
@@ -1465,6 +1549,8 @@
                     number: p.number,
                     isGoalieEligible: p.isGoalieEligible,
                     neverGoalie: p.neverGoalie,
+                    prefersDefense: !!p.prefersDefense,
+                    pairedWith: p.pairedWith || '',
                     history: p.history || { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 },
                     goals: p.goals || 0,
                     present: p.present !== undefined ? p.present : true
@@ -1520,12 +1606,15 @@
                                 number: p.number || '0',
                                 isGoalieEligible: !!p.isGoalieEligible,
                                 neverGoalie: !!p.neverGoalie,
+                                prefersDefense: !!p.prefersDefense,
+                                pairedWith: p.pairedWith || '',
                                 history: p.history || { OL: 0, OM: 0, OR: 0, DL: 0, DM: 0, DR: 0, GK: 0, Bench: 0 },
                                 goals: p.goals || 0,
                                 present: p.present !== undefined ? p.present : true
                             }));
                             saveRoster();
                             renderRoster();
+                            populatePairDropdown(null);
                             document.getElementById('modal-import-export').classList.add('hidden');
                         } else {
                             helpEl.innerText = "Error: Invalid code format. Try copying again.";
@@ -1546,7 +1635,7 @@
             
             safeBindClick('clear-roster-btn', () => {
                 triggerConfirmation("Clear Team?", "This will delete all players on your roster permanently.", () => {
-                    players = []; saveRoster(); renderRoster();
+                    players = []; saveRoster(); renderRoster(); populatePairDropdown(null);
                 });
             });
             
@@ -1634,7 +1723,26 @@
             
             safeBindClick('live-home-score-minus', () => {
                 const game = games.find(g => g.id === activeGameId);
-                if (game && game.homeScore > 0) { game.homeScore--; saveGames(); renderMatchTab(); }
+                if (game && game.homeScore > 0) { 
+                    game.homeScore--; 
+                    
+                    // Remove most recent goal event and subtract from scorer's lifetime goals
+                    if (game.goalEvents && game.goalEvents.length > 0) {
+                        const removedGoal = game.goalEvents.shift(); // shifts newest out
+                        if (removedGoal && removedGoal.scorerId) {
+                            players = players.map(p => {
+                                if (p.id === removedGoal.scorerId) {
+                                    return { ...p, goals: Math.max(0, (p.goals || 0) - 1) };
+                                }
+                                return p;
+                            });
+                            saveRoster();
+                            renderRoster();
+                        }
+                    }
+                    saveGames(); 
+                    renderMatchTab(); 
+                }
             });
             
             safeBindClick('live-away-score-plus', () => {
@@ -1789,7 +1897,7 @@
             benchScorersGrid.innerHTML = '';
             const benchPlayers = players.filter(p => game.attendance[p.id] && !activeOnField.some(on => on.id === p.id));
             if (benchPlayers.length === 0) {
-                benchScorersGrid.innerHTML = `<p class="text-xs text-slate-555 italic text-center py-2">No benched substitutes.</p>`;
+                benchScorersGrid.innerHTML = `<p class="text-xs text-slate-500 italic text-center py-2">No benched substitutes.</p>`;
             } else {
                 benchPlayers.forEach(p => {
                     const btn = document.createElement('button');
