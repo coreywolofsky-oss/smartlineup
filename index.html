@@ -443,52 +443,30 @@
         </div>
     </div>
 
-    <!-- PAST GAME DETAILS MODAL with Delete Action -->
-    <div id="modal-past-game" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-scale-up">
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
-            <div class="p-4 border-b border-slate-700 bg-slate-800 z-20 flex justify-between items-center sticky top-0">
-                <div>
-                    <h3 id="past-game-title" class="font-extrabold text-lg text-white">vs Opponent</h3>
-                    <p id="past-game-date" class="text-xs text-emerald-400 font-mono">Date</p>
-                </div>
-                <div class="text-right">
-                    <div id="past-game-score" class="text-2xl font-black text-white">0 - 0</div>
-                    <span class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Final</span>
-                </div>
+    <!-- PAST GAME DETAILS MODAL -->
+    <div id="modal-past-game" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-scale-up">
+        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-5 w-full max-w-md space-y-4 max-h-[90vh] flex flex-col">
+            <div class="text-center space-y-1 shrink-0">
+                <h3 id="past-game-title" class="font-extrabold text-lg text-white">vs Opponent</h3>
+                <p id="past-game-date" class="text-xs text-emerald-400 font-medium">Date</p>
+                <div id="past-game-score" class="text-3xl font-black text-white mt-2">0 - 0</div>
             </div>
             
-            <div class="p-4 overflow-y-auto overflow-x-hidden flex-1 space-y-4">
-                <div class="bg-slate-900/50 py-3 rounded-2xl border border-slate-700/80 overflow-hidden shadow-inner">
-                    <h4 class="font-extrabold text-white text-xs mb-3 px-3 uppercase tracking-wider text-slate-400">Match Lineup Record</h4>
-                    <div id="past-game-matrix-wrapper" class="overflow-x-auto px-3 scrollbar-thin"></div>
-                </div>
-                
-                <div id="past-game-goals-container" class="space-y-1.5 hidden">
-                    <h4 class="font-extrabold text-white text-xs mb-2 uppercase tracking-wider text-slate-400">Goal Events</h4>
+            <div class="flex-1 overflow-y-auto space-y-4 scrollbar-thin pr-1">
+                <div id="past-game-goals-container" class="space-y-2 hidden">
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block border-b border-slate-700/60 pb-1">Goal Timeline</span>
                     <div id="past-game-goals-list" class="space-y-1.5"></div>
                 </div>
+                
+                <div class="space-y-2">
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block border-b border-slate-700/60 pb-1">Shift Matrix Archive</span>
+                    <div id="past-game-matrix-wrapper" class="overflow-x-auto rounded-xl border border-slate-700/50 bg-slate-900/30 scrollbar-thin"></div>
+                </div>
             </div>
             
-            <div class="p-4 border-t border-slate-700 bg-slate-850 flex gap-2">
-                <button type="button" id="delete-past-game-btn" class="flex-1 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 font-bold py-3 rounded-xl text-xs transition-colors flex items-center justify-center gap-1">
-                    🗑️ Delete Game
-                </button>
-                <button type="button" id="close-past-game-btn" class="flex-1 bg-slate-700 hover:bg-slate-650 text-white font-bold py-3 rounded-xl text-xs transition-colors">
-                    Close Archives
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- IMPORT/EXPORT MODAL -->
-    <div id="modal-import-export" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-5 w-full max-w-sm space-y-4 animate-scale-up">
-            <h3 id="import-export-title" class="font-bold text-base text-white text-center">📤 Export / Import Roster</h3>
-            <p id="import-export-help" class="text-xs text-slate-400 text-center leading-relaxed">Copy this code to share your team roster, or paste a code below to load your roster.</p>
-            <textarea id="import-export-textarea" class="w-full h-32 bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-300 font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="Paste roster code here..."></textarea>
-            <div class="flex space-x-2 pt-2">
-                <button type="button" id="close-import-export-btn" class="flex-1 bg-slate-700 text-slate-300 font-bold py-2.5 rounded-xl text-xs">Close</button>
-                <button type="button" id="action-import-export-btn" class="flex-1 bg-emerald-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Copy Code</button>
+            <div class="pt-2 shrink-0 space-y-2 flex flex-col">
+                <button type="button" id="close-past-game-btn" class="w-full bg-slate-700 hover:bg-slate-650 text-white font-bold py-2.5 rounded-xl text-xs transition-colors">Close Archive</button>
+                <button type="button" id="delete-past-game-btn" class="w-full bg-red-500/10 text-red-400 font-bold py-2 rounded-xl text-[10px] transition-colors hover:bg-red-500/20">Delete Game Record</button>
             </div>
         </div>
     </div>
@@ -501,7 +479,7 @@
                 <span class="text-[10px] font-bold">Roster</span>
             </button>
             <button id="nav-games" class="flex flex-col items-center space-y-0.5 py-1 px-3 rounded-xl transition-all text-slate-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                 <span class="text-[10px] font-bold">Games</span>
             </button>
             <button id="nav-match" class="flex flex-col items-center space-y-0.5 py-1 px-3 rounded-xl transition-all relative text-slate-400">
@@ -843,6 +821,56 @@
             }
         }
 
+        function renderHistoryLogs() {
+            const completedGames = games.filter(g => g.status === 'Completed');
+            const listContainer = document.getElementById('completed-logs-list');
+            listContainer.innerHTML = '';
+            
+            if (completedGames.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="bg-slate-800/40 rounded-3xl p-10 border border-slate-700 border-dashed text-center text-slate-500">
+                        <p class="mt-2 text-xs text-slate-400">No completed games found. Finish an active match to archive it here.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            completedGames.forEach(game => {
+                const isWin = game.homeScore > game.awayScore;
+                const isDraw = game.homeScore === game.awayScore;
+                const resultBadge = isWin ? '<span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">W</span>' : 
+                                    (isDraw ? '<span class="bg-slate-500/20 text-slate-400 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">D</span>' : 
+                                    '<span class="bg-red-500/20 text-red-400 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">L</span>');
+                                    
+                const card = document.createElement('div');
+                card.className = 'bg-slate-800 hover:bg-slate-750 border border-slate-700/80 rounded-2xl p-4 cursor-pointer transition-all flex items-center justify-between animate-scale-up';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-extrabold text-white text-base">vs ${game.opponent}</h3>
+                            ${resultBadge}
+                        </div>
+                        <span class="text-xs text-slate-400 block mt-1">${game.date}</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="block text-[10px] text-slate-500 font-bold uppercase mb-0.5">Score</span>
+                        <span class="text-xl font-black text-white">${game.homeScore} - ${game.awayScore}</span>
+                    </div>
+                `;
+                card.addEventListener('click', () => viewPastGameDetails(game.id));
+                listContainer.appendChild(card);
+            });
+        }
+
+        function handleDeletePastGame(gameId) {
+            triggerConfirmation("Delete Game Record?", "This will permanently delete this game from your archives. (Player stats will not be reversed).", () => {
+                games = games.filter(g => g.id !== gameId);
+                saveGames();
+                document.getElementById('modal-past-game').classList.add('hidden');
+                renderHistoryLogs();
+            });
+        }
+
         function renderGameSetupDashboard() {
             const game = games.find(g => g.id === activeGameId);
             if (!game) return;
@@ -919,6 +947,7 @@
             });
         }
 
+        // --- MATH HELPERS FOR SOLVER ---
         function getBestPermutation(playersList, positionsList) {
             const perms = [
                 [0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]
@@ -929,9 +958,11 @@
                 let cost = 0;
                 for (let i = 0; i < 3; i++) {
                     const player = playersList[i];
-                    const pos = positionsList[p[i]];
-                    const playedCount = (player && player.history && player.history[pos]) ? player.history[pos] : 0;
-                    cost += playedCount;
+                    if (player) {
+                        const pos = positionsList[p[i]];
+                        const playedCount = (player.history && player.history[pos]) ? player.history[pos] : 0;
+                        cost += playedCount;
+                    }
                 }
                 if (cost < minCost) {
                     minCost = cost;
@@ -947,86 +978,389 @@
             return result;
         }
 
-        // --- SUBSET KNAPSACK SOLVER TO BENCH PAIRED TEAMMATES TOGETHER ---
-        function findBestBenchSubset(units, B, rawScores) {
-            let bestSubset = null;
-            let minScore = Infinity;
-            
-            function search(index, currentSubset, currentSize, currentScore) {
-                if (currentSize === B) {
-                    if (currentScore < minScore) {
-                        minScore = currentScore;
-                        bestSubset = [...currentSubset];
-                    }
-                    return;
-                }
-                if (currentSize > B || index >= units.length) return;
-                
-                // Option A: Include unit
-                currentSubset.push(units[index]);
-                search(index + 1, currentSubset, currentSize + units[index].size, currentScore + units[index].score);
-                currentSubset.pop();
-                
-                // Option B: Exclude unit
-                search(index + 1, currentSubset, currentSize, currentScore);
-            }
-            
-            search(0, [], 0, 0);
-            
-            // Fallback: If pairing was impossible to maintain perfectly due to roster math constraints,
-            // break the pairs down into individual units and search again.
-            if (!bestSubset) {
-                const individualUnits = [];
-                units.forEach(u => {
-                    u.players.forEach(p => {
-                        individualUnits.push({
-                            type: 'individual',
-                            players: [p],
-                            size: 1,
-                            score: rawScores[p.id]
-                        });
-                    });
-                });
-                return findBestBenchSubset(individualUnits, B, rawScores);
-            }
-            
-            return bestSubset;
+        function getPlayerPositionLabelInShift(playerId, shift) {
+            if (!shift) return 'Bench';
+            if (shift.GK === playerId) return 'Goalie';
+            if (shift.OL === playerId) return 'Left Offense';
+            if (shift.OM === playerId) return 'Middle Offense';
+            if (shift.OR === playerId) return 'Right Offense';
+            if (shift.DL === playerId) return 'Left Defense';
+            if (shift.DM === playerId) return 'Middle Defense';
+            if (shift.DR === playerId) return 'Right Defense';
+            return 'Bench';
         }
 
-        // --- EXTRACT GAME HISTORY TO POINT IN TIME ---
-        function getTempHistoryUpTo(game, startShiftIndex) {
-            const tempHistories = {};
-            players.forEach(p => {
-                tempHistories[p.id] = { ...p.history }; // contains lifetime stats up to now
+        function getPlayerPositionKeyInShift(playerId, shift) {
+            if (!shift) return 'Bench';
+            if (shift.GK === playerId) return 'GK';
+            if (shift.OL === playerId) return 'OL';
+            if (shift.OM === playerId) return 'OM';
+            if (shift.OR === playerId) return 'OR';
+            if (shift.DL === playerId) return 'DL';
+            if (shift.DM === playerId) return 'DM';
+            if (shift.DR === playerId) return 'DR';
+            return 'Bench';
+        }
+        
+        function getPlayerShiftRoleCode(playerId, shift) {
+            if (!shift) return 'B';
+            if (shift.GK === playerId) return 'GK';
+            if (shift.OL === playerId || shift.OM === playerId || shift.OR === playerId) return 'OFF';
+            if (shift.DL === playerId || shift.DM === playerId || shift.DR === playerId) return 'DEF';
+            return 'B';
+        }
+
+        // --- NEW STRICT QUOTA SOLVER ---
+        function solveLineup(game, startShiftIndex) {
+            const presentPlayers = players.filter(p => game.attendance[p.id]);
+            const N = presentPlayers.length;
+            if (N === 0) return;
+
+            const Q = game.quartersCount;
+            const Sq = game.shiftsPerQuarter;
+            const S = Q * Sq;
+
+            // 1. Exact 48 Outfield Slot Calculation
+            const totalOutfieldSlots = 6 * S;
+            const baseBudget = Math.floor(totalOutfieldSlots / N);
+            const remainder = totalOutfieldSlots % N;
+
+            const sortedForExtra = [...presentPlayers].sort((a, b) => {
+                const benchA = a.history && a.history.Bench ? a.history.Bench : 0;
+                const benchB = b.history && b.history.Bench ? b.history.Bench : 0;
+                return benchB - benchA; // Highest bench history gets the extra shifts
             });
-            
-            if (game.lineup) {
-                for (let t = 0; t < startShiftIndex; t++) {
-                    const shift = game.lineup[t];
-                    if (!shift) continue;
-                    players.forEach(p => {
-                        const role = getPlayerShiftRoleCode(p.id, shift);
-                        if (role === 'GK') tempHistories[p.id].GK = (tempHistories[p.id].GK || 0) + 1;
-                        else if (role === 'OFF') {
-                            if (shift.OL === p.id) tempHistories[p.id].OL = (tempHistories[p.id].OL || 0) + 1;
-                            if (shift.OM === p.id) tempHistories[p.id].OM = (tempHistories[p.id].OM || 0) + 1;
-                            if (shift.OR === p.id) tempHistories[p.id].OR = (tempHistories[p.id].OR || 0) + 1;
-                        }
-                        else if (role === 'DEF') {
-                            if (shift.DL === p.id) tempHistories[p.id].DL = (tempHistories[p.id].DL || 0) + 1;
-                            if (shift.DM === p.id) tempHistories[p.id].DM = (tempHistories[p.id].DM || 0) + 1;
-                            if (shift.DR === p.id) tempHistories[p.id].DR = (tempHistories[p.id].DR || 0) + 1;
-                        }
-                        else {
-                            tempHistories[p.id].Bench = (tempHistories[p.id].Bench || 0) + 1;
-                        }
-                    });
+
+            const targetOutfieldBudgets = {};
+            presentPlayers.forEach(p => targetOutfieldBudgets[p.id] = baseBudget);
+            for (let i = 0; i < remainder; i++) targetOutfieldBudgets[sortedForExtra[i].id]++;
+
+            // 2. Exact Equal Balance Splits
+            const targetOffense = {};
+            const targetDefense = {};
+            let totalOffNeeded = 3 * S;
+            let totalDefNeeded = 3 * S;
+
+            const oddPlayers = [];
+            presentPlayers.forEach(p => {
+                const total = targetOutfieldBudgets[p.id];
+                if (total % 2 === 0) {
+                    targetOffense[p.id] = total / 2;
+                    targetDefense[p.id] = total / 2;
+                    totalOffNeeded -= (total / 2);
+                    totalDefNeeded -= (total / 2);
+                } else {
+                    oddPlayers.push(p);
+                }
+            });
+
+            // Handle odd totals (e.g. 3 shifts) - Assign by preferences while keeping team totals perfectly equal
+            oddPlayers.sort((a, b) => (b.prefersDefense ? 1 : 0) - (a.prefersDefense ? 1 : 0));
+            oddPlayers.forEach(p => {
+                const total = targetOutfieldBudgets[p.id];
+                const halfFloor = Math.floor(total / 2);
+                const halfCeil = Math.ceil(total / 2);
+
+                if (p.prefersDefense) {
+                    if (totalDefNeeded >= halfCeil) {
+                        targetDefense[p.id] = halfCeil;
+                        targetOffense[p.id] = halfFloor;
+                    } else {
+                        targetDefense[p.id] = halfFloor;
+                        targetOffense[p.id] = halfCeil;
+                    }
+                } else {
+                    if (totalOffNeeded >= halfCeil) {
+                        targetOffense[p.id] = halfCeil;
+                        targetDefense[p.id] = halfFloor;
+                    } else {
+                        targetOffense[p.id] = halfFloor;
+                        targetDefense[p.id] = halfCeil;
+                    }
+                }
+                totalOffNeeded -= targetOffense[p.id];
+                totalDefNeeded -= targetDefense[p.id];
+            });
+
+            // 3. Subtract any shifts mathematically processed prior to this override (for manual recalculations)
+            const computedLineup = game.lineup ? game.lineup.slice(0, startShiftIndex) : [];
+            const activeOffenseCounts = {};
+            const activeDefenseCounts = {};
+            presentPlayers.forEach(p => {
+                activeOffenseCounts[p.id] = 0;
+                activeDefenseCounts[p.id] = 0;
+            });
+
+            for (let r = 0; r < startShiftIndex; r++) {
+                const shift = computedLineup[r];
+                if (shift) {
+                    ['OL', 'OM', 'OR'].forEach(pos => { if (shift[pos]) activeOffenseCounts[shift[pos]]++; });
+                    ['DL', 'DM', 'DR'].forEach(pos => { if (shift[pos]) activeDefenseCounts[shift[pos]]++; });
                 }
             }
-            return tempHistories;
+
+            const remainingOff = {};
+            const remainingDef = {};
+            presentPlayers.forEach(p => {
+                remainingOff[p.id] = targetOffense[p.id] - activeOffenseCounts[p.id];
+                remainingDef[p.id] = targetDefense[p.id] - activeDefenseCounts[p.id];
+            });
+
+            // Helper to generate assignment combos
+            const getCombinations = (arr, k) => {
+                if (k > arr.length) return [arr]; // Handle extreme shortage logic
+                const results = [];
+                const helper = (start, combo) => {
+                    if (combo.length === k) { results.push([...combo]); return; }
+                    for (let i = start; i < arr.length; i++) {
+                        combo.push(arr[i]);
+                        helper(i + 1, combo);
+                        combo.pop();
+                    }
+                };
+                helper(0, []);
+                return results;
+            };
+
+            // 4. Per-Shift Exhaustive Search with Strict Rejects
+            for (let t = startShiftIndex; t < S; t++) {
+                const qIdx = Math.floor(t / Sq);
+                const goalieId = game.selectedGoalies[qIdx] || '';
+                
+                // Exempt goalies - they don't consume outfield quotas while in net!
+                const candidates = presentPlayers.filter(p => p.id !== goalieId);
+                const candidateIds = candidates.map(p => p.id);
+                
+                const availableShifts = {};
+                presentPlayers.forEach(p => {
+                    let avail = 0;
+                    for(let futureT = t; futureT < S; futureT++) {
+                        if (game.selectedGoalies[Math.floor(futureT / Sq)] !== p.id) {
+                            avail++;
+                        }
+                    }
+                    availableShifts[p.id] = avail;
+                });
+
+                const consecutiveBenched = {};
+                const consecutivePlayed = {};
+                const benchedThisQuarter = {};
+                const playedThisQuarter = {};
+
+                presentPlayers.forEach(p => {
+                    consecutiveBenched[p.id] = 0;
+                    consecutivePlayed[p.id] = 0;
+                    benchedThisQuarter[p.id] = 0;
+                    playedThisQuarter[p.id] = 0;
+                    
+                    let foundBenchChange = false;
+                    let foundPlayChange = false;
+                    
+                    for (let r = t - 1; r >= 0; r--) {
+                        const shift = computedLineup[r];
+                        if (!shift) continue;
+                        const wasBenched = shift.Bench.includes(p.id);
+                        
+                        if (wasBenched) {
+                            if (!foundBenchChange) consecutiveBenched[p.id]++;
+                            foundPlayChange = true;
+                        } else {
+                            if (!foundPlayChange) consecutivePlayed[p.id]++;
+                            foundBenchChange = true;
+                        }
+                    }
+
+                    const qStart = Math.floor(t / Sq) * Sq;
+                    for (let r = qStart; r < t; r++) {
+                         const shift = computedLineup[r];
+                         if (shift) {
+                             if (shift.Bench.includes(p.id)) benchedThisQuarter[p.id]++;
+                             else playedThisQuarter[p.id]++;
+                         }
+                    }
+                });
+
+                const offCombinations = getCombinations(candidateIds, 3);
+                let bestShiftMap = null;
+                let bestScore = -Infinity;
+
+                for (let offIdx = 0; offIdx < offCombinations.length; offIdx++) {
+                    const offGroup = offCombinations[offIdx];
+                    
+                    // Reject: Hard Quota violation
+                    let validOff = true;
+                    for(let i = 0; i < offGroup.length; i++) {
+                        if (remainingOff[offGroup[i]] <= 0) { validOff = false; break; }
+                    }
+                    if (!validOff) continue;
+
+                    const remainingCandidates = candidateIds.filter(id => !offGroup.includes(id));
+                    const defCombinations = getCombinations(remainingCandidates, 3);
+
+                    for (let defIdx = 0; defIdx < defCombinations.length; defIdx++) {
+                        const defGroup = defCombinations[defIdx];
+                        
+                        // Reject: Hard Quota violation
+                        let validDef = true;
+                        for(let i = 0; i < defGroup.length; i++) {
+                            if (remainingDef[defGroup[i]] <= 0) { validDef = false; break; }
+                        }
+                        if (!validDef) continue;
+
+                        const benchGroup = remainingCandidates.filter(id => !defGroup.includes(id));
+                        
+                        // Reject: Math violation (Benching them now means they can't mathematically hit their required total quota)
+                        let validBench = true;
+                        for(let i = 0; i < benchGroup.length; i++) {
+                            const id = benchGroup[i];
+                            if (remainingOff[id] + remainingDef[id] > availableShifts[id] - 1) {
+                                validBench = false; break;
+                            }
+                        }
+                        if (!validBench) continue;
+
+                        let score = 0;
+                        const prevShift = t > 0 ? computedLineup[t - 1] : null;
+                        
+                        const evalPlayer = (id, role) => {
+                            let pScore = 0;
+                            const remOff = remainingOff[id];
+                            const remDef = remainingDef[id];
+                            const totalRem = remOff + remDef;
+                            
+                            let outfieldShiftsLeft = 0;
+                            for(let r = t; r < S; r++) {
+                                if (game.selectedGoalies[Math.floor(r / Sq)] !== id) outfieldShiftsLeft++;
+                            }
+                            
+                            const qIdx = Math.floor(t / Sq);
+                            const isLastShiftOfQuarter = ((t + 1) % Sq) === 0;
+
+                            if (role === 'BENCH') {
+                                // Mathematical bounds: If they bench, can they still hit their game quota?
+                                if (totalRem >= outfieldShiftsLeft) pScore -= 10000000;
+                                
+                                // Urgency to bench: If totalRem is low compared to shifts left, we WANT to bench them early
+                                const benchUrgency = outfieldShiftsLeft > 0 ? ((outfieldShiftsLeft - totalRem) / outfieldShiftsLeft) : 0;
+                                pScore += benchUrgency * 10000;
+
+                                // Prevent back-loading: Severely penalize benching if they just benched
+                                if (consecutiveBenched[id] > 0) pScore -= 5000 * consecutiveBenched[id];
+                                
+                                // Try to ensure they don't bench the entire quarter.
+                                // Progressive penalty: it hurts much more to bench a whole quarter later in the game!
+                                if (isLastShiftOfQuarter && playedThisQuarter[id] === 0 && totalRem > 0) {
+                                    pScore -= 100000 * (qIdx + 1);
+                                }
+                            } else {
+                                // OFF or DEF
+                                // Mathematical bounds: Ensure they don't burn the wrong quota
+                                if (role === 'OFF' && remDef >= outfieldShiftsLeft) pScore -= 10000000;
+                                if (role === 'DEF' && remOff >= outfieldShiftsLeft) pScore -= 10000000;
+
+                                const playUrgency = outfieldShiftsLeft > 0 ? (totalRem / outfieldShiftsLeft) : 0;
+                                pScore += playUrgency * 10000;
+
+                                // Balance personal OFF/DEF to prevent getting mathematically trapped later without valid quotas
+                                if (role === 'OFF' && remOff > remDef) pScore += (remOff - remDef) * 5000;
+                                if (role === 'DEF' && remDef > remOff) pScore += (remDef - remOff) * 5000;
+
+                                // Reward getting back on the field
+                                if (consecutiveBenched[id] > 0) pScore += 5000 * consecutiveBenched[id];
+                                
+                                if (playedThisQuarter[id] === 0) {
+                                    pScore += 20000; // Reward getting their first shift this quarter
+                                } else {
+                                    // Progressive penalty for playing multiple shifts in the SAME quarter.
+                                    // Forces "double shifts" into Q1/Q2 to keep Q4 completely open for everyone!
+                                    pScore -= 20000 * (qIdx + 1); 
+                                }
+                            }
+
+                            // Alternating optimization pattern matching
+                            if (prevShift) {
+                                let prevRole = 'BENCH';
+                                if (prevShift.GK === id) prevRole = 'GK';
+                                else if ([prevShift.OL, prevShift.OM, prevShift.OR].includes(id)) prevRole = 'OFF';
+                                else if ([prevShift.DL, prevShift.DM, prevShift.DR].includes(id)) prevRole = 'DEF';
+
+                                if (role === 'OFF') {
+                                    if (prevRole === 'DEF') pScore += 800; // Strong flip
+                                    else if (prevRole === 'OFF') pScore -= 400; // Penalize back-to-back same role
+                                } else if (role === 'DEF') {
+                                    if (prevRole === 'OFF') pScore += 800;
+                                    else if (prevRole === 'DEF') pScore -= 400;
+                                }
+                            }
+                            
+                            // Handle pairs if applicable
+                            const pObj = presentPlayers.find(p => p.id === id);
+                            if (pObj && pObj.pairedWith) {
+                                const partnerRole = offGroup.includes(pObj.pairedWith) ? 'OFF' : 
+                                                  defGroup.includes(pObj.pairedWith) ? 'DEF' : 
+                                                  benchGroup.includes(pObj.pairedWith) ? 'BENCH' : 
+                                                  goalieId === pObj.pairedWith ? 'GK' : null;
+                                if (partnerRole) {
+                                    if (role === partnerRole && role !== 'BENCH') pScore += 150;
+                                    else if (role === partnerRole && role === 'BENCH') pScore += 50;
+                                    else pScore -= 100;
+                                }
+                            }
+                            return pScore;
+                        };
+
+                        for(let i = 0; i < offGroup.length; i++) score += evalPlayer(offGroup[i], 'OFF');
+                        for(let i = 0; i < defGroup.length; i++) score += evalPlayer(defGroup[i], 'DEF');
+                        for(let i = 0; i < benchGroup.length; i++) score += evalPlayer(benchGroup[i], 'BENCH');
+
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestShiftMap = { OFF: [...offGroup], DEF: [...defGroup], BENCH: [...benchGroup] };
+                        }
+                    }
+                }
+
+                // Mathematical Edge-Case Failsafe (Prioritizes players missing quotas)
+                if (!bestShiftMap) {
+                    candidates.sort((a, b) => {
+                        const aRem = remainingOff[a.id] + remainingDef[a.id];
+                        const bRem = remainingOff[b.id] + remainingDef[b.id];
+                        if (aRem !== bRem) return bRem - aRem;
+                        return playedThisQuarter[a.id] - playedThisQuarter[b.id];
+                    });
+                    const off = []; const def = []; const bench = [];
+                    candidates.forEach(p => {
+                        if (off.length < 3 && remainingOff[p.id] > 0) off.push(p.id);
+                        else if (def.length < 3 && remainingDef[p.id] > 0) def.push(p.id);
+                        else if (off.length < 3) off.push(p.id);
+                        else if (def.length < 3) def.push(p.id);
+                        else bench.push(p.id);
+                    });
+                    bestShiftMap = { OFF: off, DEF: def, BENCH: bench };
+                }
+
+                // Commit the shift and decrement remaining slots
+                bestShiftMap.OFF.forEach(id => remainingOff[id]--);
+                bestShiftMap.DEF.forEach(id => remainingDef[id]--);
+
+                const offPlayers = bestShiftMap.OFF.map(id => presentPlayers.find(p => p.id === id)).filter(Boolean);
+                const defPlayers = bestShiftMap.DEF.map(id => presentPlayers.find(p => p.id === id)).filter(Boolean);
+                
+                const offMap = getBestPermutation(offPlayers, ['OL', 'OM', 'OR']);
+                const defMap = getBestPermutation(defPlayers, ['DL', 'DM', 'DR']);
+
+                computedLineup.push({
+                    GK: goalieId || '',
+                    OL: offMap.OL || '', OM: offMap.OM || '', OR: offMap.OR || '',
+                    DL: defMap.DL || '', DM: defMap.DM || '', DR: defMap.DR || '',
+                    Bench: bestShiftMap.BENCH
+                });
+            }
+            
+            game.lineup = computedLineup;
+            game.timeRemaining = (game.quarterMinutes * 60) / game.shiftsPerQuarter;
         }
 
-        // --- LINEUP ROTATION ENGINE (HISTORIC EQUALIZER & DETAILED SHIFTS) ---
         function runRotationSolver() {
             const game = games.find(g => g.id === activeGameId);
             if (!game) return;
@@ -1036,442 +1370,98 @@
             game.status = 'Active';
             game.currentShiftIndex = 0;
             saveGames();
-            timeRemaining = game.timeRemaining;
+            renderMatchTab();
             updateTabNavigation('match');
         }
 
-        // --- THE DYNAMIC RECALCULATION LINEUP SOLVER ---
-        function solveLineup(game, startShiftIndex) {
-            const presentPlayers = players.filter(p => game.attendance[p.id]);
-            const N = presentPlayers.length;
-            const Q = game.quartersCount;
-            const Sq = game.shiftsPerQuarter;
-            const S = Q * Sq;
-            
-            const tempHistories = getTempHistoryUpTo(game, startShiftIndex);
-            
-            const activeOffenseCounts = {};
-            const activeDefenseCounts = {};
-            const totalGameGkShifts = {};
-            
-            presentPlayers.forEach(p => {
-                activeOffenseCounts[p.id] = 0;
-                activeDefenseCounts[p.id] = 0;
-                totalGameGkShifts[p.id] = 0;
-            });
-
-            // Reconstruct active/GK shifts counts up to startShiftIndex - 1
-            for (let r = 0; r < startShiftIndex; r++) {
-                const shift = game.lineup[r];
-                if (shift) {
-                    presentPlayers.forEach(p => {
-                        const role = getPlayerShiftRoleCode(p.id, shift);
-                        if (role === 'GK') totalGameGkShifts[p.id] += Sq;
-                        else if (role === 'OFF') activeOffenseCounts[p.id]++;
-                        else if (role === 'DEF') activeDefenseCounts[p.id]++;
-                    });
-                }
-            }
-            
-            // Pre-calculate goalkeeper shifts from startShiftIndex to end
-            for (let q = 0; q < Q; q++) {
-                const gId = game.selectedGoalies[q];
-                if (gId && totalGameGkShifts[gId] !== undefined) {
-                    totalGameGkShifts[gId] += Sq;
-                }
-            }
-
-            const computedLineup = game.lineup ? game.lineup.slice(0, startShiftIndex) : [];
-            const goaliesToday = new Set(game.selectedGoalies.filter(Boolean));
-            const playedOutfield = {};
-            presentPlayers.forEach(p => {
-                playedOutfield[p.id] = 0;
-                // Count already played outfield shifts up to startShiftIndex - 1
-                for (let r = 0; r < startShiftIndex; r++) {
-                    const shift = computedLineup[r];
-                    if (shift && [shift.OL, shift.OM, shift.OR, shift.DL, shift.DM, shift.DR].includes(p.id)) {
-                        playedOutfield[p.id]++;
-                    }
-                }
-            });
-
-            for (let t = startShiftIndex; t < S; t++) {
-                const qIdx = Math.floor(t / Sq);
-                const goalieId = game.selectedGoalies[qIdx] || presentPlayers[0].id;
-                
-                const candidates = presentPlayers.filter(p => p.id !== goalieId);
-                
-                // Calculate raw scores for benching
-                const rawScores = {};
-                candidates.forEach(c => {
-                    const benchHistory = tempHistories[c.id].Bench || 0;
-                    const satLastShift = (t > 0 && computedLineup[t-1].Bench.includes(c.id)) ? 1000 : 0;
-                    
-                    // Goalie Minimum Field Play Constraints
-                    let outfieldPlayed = playedOutfield[c.id] || 0;
-                    let remainingGKShifts = 0;
-                    for (let r = t; r < S; r++) {
-                        if (game.selectedGoalies[Math.floor(r / Sq)] === c.id) remainingGKShifts++;
-                    }
-                    const remainingShiftsTotal = S - t;
-                    const maxPossibleOutfieldFuture = remainingShiftsTotal - remainingGKShifts;
-                    
-                    let goaliePlayBooster = 0;
-                    if (goaliesToday.has(c.id)) {
-                        const neededOutfield = 3 - outfieldPlayed;
-                        if (neededOutfield > 0) {
-                            if (maxPossibleOutfieldFuture <= neededOutfield) {
-                                goaliePlayBooster = 5000; // Must play outfielder
-                            } else {
-                                goaliePlayBooster = neededOutfield * 150;
-                            }
-                        }
-                    }
-                    
-                    rawScores[c.id] = benchHistory + satLastShift + goaliePlayBooster;
-                });
-
-                // Build pairing-aware units
-                const units = [];
-                const processedInUnits = new Set();
-                candidates.forEach(c => {
-                    if (processedInUnits.has(c.id)) return;
-                    if (c.pairedWith) {
-                        const partner = candidates.find(x => x.id === c.pairedWith);
-                        if (partner && !processedInUnits.has(partner.id)) {
-                            units.push({
-                                type: 'pair',
-                                players: [c, partner],
-                                size: 2,
-                                score: (rawScores[c.id] + rawScores[partner.id]) / 2
-                            });
-                            processedInUnits.add(c.id);
-                            processedInUnits.add(partner.id);
-                            return;
-                        }
-                    }
-                    units.push({
-                        type: 'individual',
-                        players: [c],
-                        size: 1,
-                        score: rawScores[c.id]
-                    });
-                    processedInUnits.add(c.id);
-                });
-
-                const benchCountForThisShift = N - 7;
-                const benchedUnits = findBestBenchSubset(units, benchCountForThisShift, rawScores);
-                const benchedIds = benchedUnits.flatMap(u => u.players.map(p => p.id));
-                
-                const activeFieldIds = candidates.filter(c => !benchedIds.includes(c.id)).map(p => p.id);
-                const fieldPlayers = presentPlayers.filter(p => activeFieldIds.includes(p.id));
-                
-                // Track outfield plays so that the guarantee solver counts them properly
-                activeFieldIds.forEach(id => {
-                    playedOutfield[id] = (playedOutfield[id] || 0) + 1;
-                });
-
-                fieldPlayers.sort((a, b) => {
-                    const gameDefA = activeDefenseCounts[a.id] + (totalGameGkShifts[a.id] || 0) * 0.5;
-                    const gameDefB = activeDefenseCounts[b.id] + (totalGameGkShifts[b.id] || 0) * 0.5;
-                    
-                    const prefersDefOffsetA = a.prefersDefense ? 1.5 : 0;
-                    const prefersDefOffsetB = b.prefersDefense ? 1.5 : 0;
-
-                    const gameDiffA = (activeOffenseCounts[a.id] + prefersDefOffsetA) - gameDefA;
-                    const gameDiffB = (activeOffenseCounts[b.id] + prefersDefOffsetB) - gameDefB;
-                    
-                    if (gameDiffA !== gameDiffB) {
-                        return gameDiffA - gameDiffB;
-                    }
-                    
-                    const histOffA = (tempHistories[a.id].OL || 0) + (tempHistories[a.id].OM || 0) + (tempHistories[a.id].OR || 0);
-                    const histDefA = (tempHistories[a.id].DL || 0) + (tempHistories[a.id].DM || 0) + (tempHistories[a.id].DR || 0) + ((tempHistories[a.id].GK || 0) * 0.5);
-                    const histDiffA = histOffA - histDefA + (a.prefersDefense ? 10 : 0);
-
-                    const histOffB = (b.history?.OL || 0) + (b.history?.OM || 0) + (b.history?.OR || 0);
-                    const histDefB = (b.history?.DL || 0) + (b.history?.DM || 0) + (b.history?.DR || 0) + ((b.history?.GK || 0) * 0.5);
-                    const histDiffB = histOffB - histDefB + (b.prefersDefense ? 10 : 0);
-
-                    return histDiffA - histDiffB;
-                });
-                
-                // --- PAIR LINE ALIGNMENT ADJUSTMENT ---
-                // Ensure paired players play on the same line (offense together, defense together)
-                const processedPairs = new Set();
-                for (let i = 0; i < fieldPlayers.length; i++) {
-                    const p1 = fieldPlayers[i];
-                    if (p1.pairedWith && !processedPairs.has(p1.id)) {
-                        const partnerIdx = fieldPlayers.findIndex(x => x.id === p1.pairedWith);
-                        if (partnerIdx !== -1) {
-                            const p2 = fieldPlayers[partnerIdx];
-                            processedPairs.add(p1.id);
-                            processedPairs.add(p2.id);
-
-                            const idx1 = i;
-                            const idx2 = partnerIdx;
-
-                            const line1 = idx1 < 3 ? 'OFF' : 'DEF';
-                            const line2 = idx2 < 3 ? 'OFF' : 'DEF';
-
-                            if (line1 !== line2) {
-                                const prefersDef = p1.prefersDefense || p2.prefersDefense;
-                                const targetLine = prefersDef ? 'DEF' : 'OFF';
-                                
-                                if (targetLine === 'OFF') {
-                                    const defPlayerIdx = idx1 >= 3 ? idx1 : idx2;
-                                    const offPlayerIdx = idx1 < 3 ? idx1 : idx2;
-                                    
-                                    let swapIdx = -1;
-                                    for (let k = 0; k < 3; k++) {
-                                        if (k !== offPlayerIdx && !fieldPlayers[k].pairedWith) {
-                                            swapIdx = k;
-                                            break;
-                                        }
-                                    }
-                                    if (swapIdx === -1) {
-                                        for (let k = 0; k < 3; k++) {
-                                            if (k !== offPlayerIdx) {
-                                                swapIdx = k;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    if (swapIdx !== -1) {
-                                        const temp = fieldPlayers[swapIdx];
-                                        fieldPlayers[swapIdx] = fieldPlayers[defPlayerIdx];
-                                        fieldPlayers[defPlayerIdx] = temp;
-                                    }
-                                } else {
-                                    const offPlayerIdx = idx1 < 3 ? idx1 : idx2;
-                                    const defPlayerIdx = idx1 >= 3 ? idx1 : idx2;
-                                    
-                                    let swapIdx = -1;
-                                    for (let k = 3; k < 6; k++) {
-                                        if (k !== defPlayerIdx && !fieldPlayers[k].pairedWith) {
-                                            swapIdx = k;
-                                            break;
-                                        }
-                                    }
-                                    if (swapIdx === -1) {
-                                        for (let k = 3; k < 6; k++) {
-                                            if (k !== defPlayerIdx) {
-                                                swapIdx = k;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    if (swapIdx !== -1) {
-                                        const temp = fieldPlayers[swapIdx];
-                                        fieldPlayers[swapIdx] = fieldPlayers[offPlayerIdx];
-                                        fieldPlayers[offPlayerIdx] = temp;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                const offenseGroup = fieldPlayers.slice(0, 3);
-                const defenseGroup = fieldPlayers.slice(3, 6);
-                offenseGroup.forEach(p => { activeOffenseCounts[p.id]++; });
-                defenseGroup.forEach(p => { activeDefenseCounts[p.id]++; });
-                const offenseMap = getBestPermutation(offenseGroup, ['OL', 'OM', 'OR']);
-                const defenseMap = getBestPermutation(defenseGroup, ['DL', 'DM', 'DR']);
-                
-                const currentShift = {
-                    GK: goalieId,
-                    OL: offenseMap.OL,
-                    OM: offenseMap.OM,
-                    OR: offenseMap.OR,
-                    DL: defenseMap.DL,
-                    DM: defenseMap.DM,
-                    DR: defenseMap.DR,
-                    Bench: benchedIds
-                };
-                computedLineup.push(currentShift);
-
-                // Update tempHistories immediately for the next loop iteration!
-                players.forEach(p => {
-                    if (goalieId === p.id) tempHistories[p.id].GK = (tempHistories[p.id].GK || 0) + 1;
-                    else if (currentShift.OL === p.id) tempHistories[p.id].OL = (tempHistories[p.id].OL || 0) + 1;
-                    else if (currentShift.OM === p.id) tempHistories[p.id].OM = (tempHistories[p.id].OM || 0) + 1;
-                    else if (currentShift.OR === p.id) tempHistories[p.id].OR = (tempHistories[p.id].OR || 0) + 1;
-                    else if (currentShift.DL === p.id) tempHistories[p.id].DL = (tempHistories[p.id].DL || 0) + 1;
-                    else if (currentShift.DM === p.id) tempHistories[p.id].DM = (tempHistories[p.id].DM || 0) + 1;
-                    else if (currentShift.DR === p.id) tempHistories[p.id].DR = (tempHistories[p.id].DR || 0) + 1;
-                    else if (benchedIds.includes(p.id)) tempHistories[p.id].Bench = (tempHistories[p.id].Bench || 0) + 1;
-                });
-            }
-            game.lineup = computedLineup;
-            game.timeRemaining = (game.quarterMinutes * 60) / game.shiftsPerQuarter;
+        // --- SUB / TTS HELPER FUNCTIONS ---
+        function getShiftDetailsLabel(idx, shiftsPerQ) {
+            if (shiftsPerQ === 1) return `Quarter ${idx + 1}`;
+            return `Quarter ${Math.floor(idx / shiftsPerQ) + 1} • Shift ${(idx % shiftsPerQ) + 1}`;
         }
 
-        function getShiftDetailsLabel(shiftIndex, shiftsPerQuarter) {
-            const q = Math.floor(shiftIndex / shiftsPerQuarter) + 1;
-            const s = (shiftIndex % shiftsPerQuarter) + 1;
-            if (shiftsPerQuarter === 1) return `Quarter ${q}`;
-            return `Quarter ${q} • Shift ${s}`;
+        function getPositionLabel(posCode) {
+            const map = { GK: 'Goalie', OL: 'Left Off', OM: 'Mid Off', OR: 'Right Off', DL: 'Left Def', DM: 'Mid Def', DR: 'Right Def', Bench: 'Bench' };
+            return map[posCode] || posCode;
         }
 
-        function computeSubstitutions(currentIdx, nextIdx) {
+        function computeSubstitutions(currIdx, nextIdx) {
             const game = games.find(g => g.id === activeGameId);
-            if (!game || !game.lineup || !game.lineup[currentIdx] || !game.lineup[nextIdx]) {
-                return { subsIn: [], subsOut: [], moves: [] };
-            }
-
-            const currentShift = game.lineup[currentIdx];
+            if (!game || !game.lineup) return { subsIn: [], subsOut: [], moves: [] };
+            
+            const currShift = game.lineup[currIdx];
             const nextShift = game.lineup[nextIdx];
-            const positions = ['GK', 'OL', 'OM', 'OR', 'DL', 'DM', 'DR'];
-
-            // Map player IDs to their current position in this shift
-            const currentActiveMap = {};
-            positions.forEach(pos => {
-                const id = currentShift[pos];
-                if (id) currentActiveMap[id] = pos;
-            });
-
-            // Map player IDs to their next position in the upcoming shift
-            const nextActiveMap = {};
-            positions.forEach(pos => {
-                const id = nextShift[pos];
-                if (id) nextActiveMap[id] = pos;
-            });
+            if (!currShift || !nextShift) return { subsIn: [], subsOut: [], moves: [] };
 
             const subsIn = [];
             const subsOut = [];
             const moves = [];
 
-            // Detect Sub Out: in current, NOT in next
-            Object.keys(currentActiveMap).forEach(id => {
-                if (!nextActiveMap[id]) {
-                    const p = players.find(x => x.id === id);
-                    if (p) subsOut.push(p);
-                }
-            });
+            players.forEach(p => {
+                if (!game.attendance[p.id]) return;
+                const currPos = getPlayerPositionKeyInShift(p.id, currShift);
+                const nextPos = getPlayerPositionKeyInShift(p.id, nextShift);
 
-            // Detect Sub In: in next, NOT in current
-            Object.keys(nextActiveMap).forEach(id => {
-                if (!currentActiveMap[id]) {
-                    const p = players.find(x => x.id === id);
-                    if (p) subsIn.push({ ...p, position: nextActiveMap[id] });
-                }
-            });
-
-            // Detect Moves: in both, but positions are different
-            Object.keys(currentActiveMap).forEach(id => {
-                if (nextActiveMap[id] && currentActiveMap[id] !== nextActiveMap[id]) {
-                    const p = players.find(x => x.id === id);
-                    if (p) {
-                        moves.push({
-                            ...p,
-                            fromPosition: currentActiveMap[id],
-                            toPosition: nextActiveMap[id]
-                        });
-                    }
+                if (currPos === 'Bench' && nextPos !== 'Bench') {
+                    subsIn.push({ id: p.id, name: p.name, position: nextPos });
+                } else if (currPos !== 'Bench' && nextPos === 'Bench') {
+                    subsOut.push({ id: p.id, name: p.name });
+                } else if (currPos !== 'Bench' && nextPos !== 'Bench' && currPos !== nextPos) {
+                    moves.push({ id: p.id, name: p.name, fromPosition: currPos, toPosition: nextPos });
                 }
             });
 
             return { subsIn, subsOut, moves };
         }
 
-        function renderHistoryLogs() {
-            const container = document.getElementById('completed-logs-list');
-            container.innerHTML = '';
-            const completedGames = games.filter(g => g.status === 'Completed');
-
-            if (completedGames.length === 0) {
-                container.innerHTML = `<div class="bg-slate-800/40 rounded-3xl p-10 border border-slate-700 border-dashed text-center text-slate-500"><p class="mt-2 text-xs text-slate-400">No completed games yet. Games will appear here once saved.</p></div>`;
-                return;
+        function speakSubstitutions(subsIn, subsOut, moves) {
+            if (!voiceEnabled || !('speechSynthesis' in window)) return;
+            let text = "Substitution alert. ";
+            if (subsIn.length > 0) {
+                text += "Subbing in: " + subsIn.map(s => `${s.name} at ${getPositionLabel(s.position)}`).join(', ') + ". ";
             }
-
-            completedGames.forEach(game => {
-                const card = document.createElement('div');
-                card.className = 'bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-sm animate-scale-up cursor-pointer hover:bg-slate-750 transition-colors';
-                card.addEventListener('click', () => viewPastGameDetails(game.id));
-                card.innerHTML = `
-                    <div class="flex justify-between items-start border-b border-slate-700 pb-2 mb-2">
-                        <div>
-                            <h3 class="font-extrabold text-white text-base">vs ${game.opponent}</h3>
-                            <span class="text-xs text-slate-400 block">${game.date}</span>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xl font-black ${game.homeScore > game.awayScore ? 'text-emerald-400' : (game.homeScore < game.awayScore ? 'text-red-400' : 'text-slate-300')}">
-                                ${game.homeScore} - ${game.awayScore}
-                            </div>
-                            <span class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Final</span>
-                        </div>
-                    </div>
-                    <div class="text-[10px] text-slate-500 font-semibold text-center mt-2 flex items-center justify-center gap-1">
-                        <span>Tap to view full match archives & lineups</span> <span>→</span>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
+            if (moves.length > 0) {
+                text += "Position changes: " + moves.map(m => `${m.name} to ${getPositionLabel(m.toPosition)}`).join(', ') + ". ";
+            }
+            if (subsOut.length > 0) {
+                text += "Subbing out: " + subsOut.map(s => s.name).join(', ') + ". ";
+            }
+            if (subsIn.length === 0 && moves.length === 0 && subsOut.length === 0) {
+                text = "No changes this shift.";
+            }
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
         }
 
-        // --- HARD ROLLBACK & DELETE GAME RECORD ---
-        function handleDeletePastGame(gameId) {
-            const game = games.find(g => g.id === gameId);
-            if (!game) return;
+        function openShiftSwapModal(playerId, shiftIdx) {
+            const game = games.find(g => g.id === activeGameId);
+            if (!game || !game.lineup || !game.lineup[shiftIdx]) return;
+            if (game.status === 'Completed') return;
 
-            triggerConfirmation(
-                "Delete Game Record?",
-                "This will permanently delete this game's logs and reverse all historical shifts/goals added to your players' lifetime stats.",
-                () => {
-                    // Reverse statistics addition if it was completed
-                    if (game.status === 'Completed' && game.lineup) {
-                        players = players.map(p => {
-                            const activeStats = { ...p.history };
-                            
-                            // Subtract the shifts recorded in this archived game
-                            game.lineup.forEach(shift => {
-                                if (shift.GK === p.id && activeStats.GK > 0) activeStats.GK--;
-                                else if (shift.OL === p.id && activeStats.OL > 0) activeStats.OL--;
-                                else if (shift.OM === p.id && activeStats.OM > 0) activeStats.OM--;
-                                else if (shift.OR === p.id && activeStats.OR > 0) activeStats.OR--;
-                                else if (shift.DL === p.id && activeStats.DL > 0) activeStats.DL--;
-                                else if (shift.DM === p.id && activeStats.DM > 0) activeStats.DM--;
-                                else if (shift.DR === p.id && activeStats.DR > 0) activeStats.DR--;
-                                if (shift.Bench && shift.Bench.includes(p.id) && activeStats.Bench > 0) activeStats.Bench--;
-                            });
-                            
-                            // Revert goals scored in this game
-                            let goalsInGame = 0;
-                            if (game.goalEvents) {
-                                game.goalEvents.forEach(evt => {
-                                    if (evt.scorerId === p.id) {
-                                        goalsInGame++;
-                                    }
-                                });
-                            }
-                            const newGoals = Math.max(0, (p.goals || 0) - goalsInGame);
+            currentSwapPlayerId = playerId;
+            currentSwapShiftIndex = shiftIdx;
 
-                            return { ...p, history: activeStats, goals: newGoals };
-                        });
-                        
-                        saveRoster();
-                    }
+            const p = players.find(x => x.id === playerId);
+            if (!p) return;
 
-                    // Reset current match state pointer if we deleted the currently active game
-                    if (activeGameId === gameId) {
-                        activeGameId = null;
-                    }
+            const shift = game.lineup[shiftIdx];
+            const currentPositionLabel = getPlayerPositionLabelInShift(playerId, shift);
 
-                    // Remove game from storage
-                    games = games.filter(g => g.id !== gameId);
-                    saveGames();
+            document.getElementById('shift-swap-desc').innerText = `Swap ${p.name}'s role (${currentPositionLabel}) in ${getShiftDetailsLabel(shiftIdx, game.shiftsPerQuarter)}.`;
 
-                    // Hide modal
-                    document.getElementById('modal-past-game').classList.add('hidden');
-                    
-                    // Re-render
-                    renderRoster();
-                    renderGamesHub();
-                    renderHistoryLogs();
-                    updateTabNavigation('logs');
-                }
-            );
+            const select = document.getElementById('shift-swap-target-select');
+            select.innerHTML = '';
+
+            const present = players.filter(x => game.attendance[x.id] && x.id !== playerId);
+            present.forEach(other => {
+                const otherRoleLabel = getPlayerPositionLabelInShift(other.id, shift);
+                const opt = document.createElement('option');
+                opt.value = other.id;
+                opt.innerText = `#${other.number} ${other.name} (${otherRoleLabel})`;
+                select.appendChild(opt);
+            });
+
+            document.getElementById('modal-shift-swap').classList.remove('hidden');
         }
 
         function renderMatchTab() {
@@ -1541,62 +1531,6 @@
                 document.getElementById('nav-match-running-indicator').classList.add('hidden');
             }
         }
-
-        function getPlayerPositionLabelInShift(playerId, shift) {
-            if (!shift) return 'Bench';
-            if (shift.GK === playerId) return 'Goalie';
-            if (shift.OL === playerId) return 'Left Offense';
-            if (shift.OM === playerId) return 'Middle Offense';
-            if (shift.OR === playerId) return 'Right Offense';
-            if (shift.DL === playerId) return 'Left Defense';
-            if (shift.DM === playerId) return 'Middle Defense';
-            if (shift.DR === playerId) return 'Right Defense';
-            return 'Bench';
-        }
-
-        function getPlayerPositionKeyInShift(playerId, shift) {
-            if (!shift) return 'Bench';
-            if (shift.GK === playerId) return 'GK';
-            if (shift.OL === playerId) return 'OL';
-            if (shift.OM === playerId) return 'OM';
-            if (shift.OR === playerId) return 'OR';
-            if (shift.DL === playerId) return 'DL';
-            if (shift.DM === playerId) return 'DM';
-            if (shift.DR === playerId) return 'DR';
-            return 'Bench';
-        }
-
-        window.openShiftSwapModal = function(playerId, shiftIdx) {
-            const game = games.find(g => g.id === activeGameId);
-            if (!game || !game.lineup || !game.lineup[shiftIdx]) return;
-            if (game.status === 'Completed') return; // Do not edit completed games
-
-            currentSwapPlayerId = playerId;
-            currentSwapShiftIndex = shiftIdx;
-
-            const p = players.find(x => x.id === playerId);
-            if (!p) return;
-
-            const shift = game.lineup[shiftIdx];
-            const currentPositionLabel = getPlayerPositionLabelInShift(playerId, shift);
-
-            document.getElementById('shift-swap-desc').innerText = `Swap ${p.name}'s role (${currentPositionLabel}) in ${getShiftDetailsLabel(shiftIdx, game.shiftsPerQuarter)}.`;
-
-            const select = document.getElementById('shift-swap-target-select');
-            select.innerHTML = '';
-
-            // Get all other players present for this game
-            const present = players.filter(x => game.attendance[x.id] && x.id !== playerId);
-            present.forEach(other => {
-                const otherRoleLabel = getPlayerPositionLabelInShift(other.id, shift);
-                const opt = document.createElement('option');
-                opt.value = other.id;
-                opt.innerText = `#${other.number} ${other.name} (${otherRoleLabel})`;
-                select.appendChild(opt);
-            });
-
-            document.getElementById('modal-shift-swap').classList.remove('hidden');
-        };
 
         function renderPlaytimeMatrixTable(game) {
             const wrapper = document.getElementById('matrix-scroll-wrapper');
@@ -1706,7 +1640,6 @@
         }
 
         document.getElementById('save-player-btn').addEventListener('click', () => {
-            // Force save and sync roster
             saveRoster();
         });
 
@@ -1764,6 +1697,169 @@
                 const nextIdx = (game.currentShiftIndex + 1) % (game.quartersCount * game.shiftsPerQuarter);
                 const changes = computeSubstitutions(game.currentShiftIndex, nextIdx);
                 speakSubstitutions(changes.subsIn, changes.subsOut, changes.moves);
+            }
+        }
+
+        function handleCreateGame() {
+            const opp = document.getElementById('input-opponent').value;
+            const dt = document.getElementById('input-date').value;
+            const qCount = parseInt(document.getElementById('select-quarters').value);
+            const sCount = parseInt(document.getElementById('select-shifts').value);
+            const mCount = parseInt(document.getElementById('input-duration').value);
+            const attendanceConfig = {};
+            players.forEach(p => attendanceConfig[p.id] = true);
+            const game = {
+                id: 'g_' + Date.now(),
+                date: dt,
+                opponent: opp,
+                quartersCount: qCount,
+                shiftsPerQuarter: sCount,
+                quarterMinutes: mCount,
+                attendance: attendanceConfig,
+                selectedGoalies: Array(qCount).fill(''),
+                lineup: null,
+                currentShiftIndex: 0,
+                homeScore: 0,
+                awayScore: 0,
+                goalEvents: [],
+                status: 'Setup'
+            };
+            games.unshift(game);
+            saveGames();
+            activeGameId = game.id;
+            document.getElementById('modal-create-game').classList.add('hidden');
+            renderGamesHub();
+        }
+
+        function populateGoalScorerGrid() {
+            const activeOnField = getActiveOnFieldPlayers();
+            const game = games.find(g => g.id === activeGameId);
+            const fieldScorersGrid = document.getElementById('modal-pitch-scorers-grid');
+            fieldScorersGrid.innerHTML = '';
+            
+            activeOnField.forEach(p => {
+                const btn = document.createElement('button');
+                btn.className = 'bg-slate-900 border border-slate-700 hover:border-emerald-500 hover:bg-slate-850 p-3 rounded-2xl text-left transition-all active:scale-95 flex items-center gap-2';
+                btn.innerHTML = `
+                    <span class="bg-slate-800 text-emerald-400 font-mono text-xs px-2 py-1 rounded">#${p.number}</span>
+                    <span class="text-xs font-bold text-white truncate">${p.name}</span>
+                `;
+                btn.addEventListener('click', () => handleLogGoalInstant(p.id));
+                fieldScorersGrid.appendChild(btn);
+            });
+            const benchScorersGrid = document.getElementById('modal-bench-scorers-list');
+            benchScorersGrid.innerHTML = '';
+            const benchPlayers = players.filter(p => game.attendance[p.id] && !activeOnField.some(on => on.id === p.id));
+            if (benchPlayers.length === 0) {
+                benchScorersGrid.innerHTML = `<p class="text-xs text-slate-555 italic text-center py-2">No benched substitutes.</p>`;
+            } else {
+                benchPlayers.forEach(p => {
+                    const btn = document.createElement('button');
+                    btn.className = 'w-full bg-slate-900/50 hover:bg-slate-800 border border-slate-800 text-left p-2 rounded-xl flex items-center gap-2';
+                    btn.innerHTML = `
+                        <span class="text-slate-555 font-mono text-[10px]">#${p.number}</span>
+                        <span class="text-xs text-slate-300">${p.name} (Bench)</span>
+                    `;
+                    btn.addEventListener('click', () => handleLogGoalInstant(p.id));
+                    benchScorersGrid.appendChild(btn);
+                });
+            }
+        }
+
+        function handleLogGoalInstant(scorerId) {
+            const game = games.find(g => g.id === activeGameId);
+            if (!game || !scorerId) return;
+            const scorer = players.find(p => p.id === scorerId);
+            if (!scorer) return;
+            const newEvent = {
+                time: formatTime(((game.quarterMinutes * 60) / game.shiftsPerQuarter) - timeRemaining),
+                shift: getShiftDetailsLabel(game.currentShiftIndex, game.shiftsPerQuarter),
+                scorerId: scorerId,
+                scorerName: `#${scorer.number} ${scorer.name}`
+            };
+            game.goalEvents = [newEvent, ...(game.goalEvents || [])];
+            game.homeScore = (game.homeScore || 0) + 1;
+            players = players.map(p => p.id === scorerId ? { ...p, goals: (p.goals || 0) + 1 } : p);
+            saveRoster();
+            saveGames();
+            document.getElementById('modal-log-goal').classList.add('hidden');
+            renderMatchTab();
+        }
+
+        function getActiveOnFieldPlayers() {
+            const game = games.find(g => g.id === activeGameId);
+            if (!game || !game.lineup) return [];
+            const shift = game.lineup[game.currentShiftIndex];
+            if (!shift) return [];
+            const activeIds = [shift.GK, shift.OL, shift.OM, shift.OR, shift.DL, shift.DM, shift.DR];
+            return players.filter(p => activeIds.includes(p.id));
+        }
+
+        function handleCloseActiveGameLog() {
+            const game = games.find(g => g.id === activeGameId);
+            if (!game) return;
+            triggerConfirmation(
+                "Save & Archive?",
+                "Complete game tracking and save the match results?",
+                () => {
+                    const updatedPlayers = players.map(p => {
+                        const activeStats = { ...p.history };
+                        game.lineup.forEach(shift => {
+                            if (shift.GK === p.id) activeStats.GK = (activeStats.GK || 0) + 1;
+                            else if (shift.OL === p.id) activeStats.OL = (activeStats.OL || 0) + 1;
+                            else if (shift.OM === p.id) activeStats.OM = (activeStats.OM || 0) + 1;
+                            else if (shift.OR === p.id) activeStats.OR = (activeStats.OR || 0) + 1;
+                            else if (shift.DL === p.id) activeStats.DL = (activeStats.DL || 0) + 1;
+                            else if (shift.DM === p.id) activeStats.DM = (activeStats.DM || 0) + 1;
+                            else if (shift.DR === p.id) activeStats.DR = (activeStats.DR || 0) + 1;
+                            else if (shift.Bench && shift.Bench.includes(p.id)) activeStats.Bench = (activeStats.Bench || 0) + 1;
+                        });
+                        return { ...p, history: activeStats };
+                    });
+                    players = updatedPlayers;
+                    saveRoster();
+                    game.status = 'Completed';
+                    saveGames();
+                    matchRunning = false;
+                    document.getElementById('nav-match-running-indicator').classList.add('hidden');
+                    renderRoster();
+                    updateTabNavigation('logs');
+                }
+            );
+        }
+
+        function formatTime(secs) {
+            const m = Math.floor(secs / 60);
+            const s = secs % 60;
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function playRefWhistle() {
+            if (!soundEnabled) return;
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc1.frequency.exponentialRampToValueAtTime(1300, audioCtx.currentTime + 0.15);
+                osc1.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.35);
+                osc2.type = 'triangle';
+                osc2.frequency.setValueAtTime(805, audioCtx.currentTime);
+                osc2.frequency.exponentialRampToValueAtTime(1305, audioCtx.currentTime + 0.15);
+                osc2.frequency.exponentialRampToValueAtTime(1005, audioCtx.currentTime + 0.35);
+                gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
+                osc1.connect(gainNode);
+                osc2.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                osc1.start();
+                osc2.start();
+                osc1.stop(audioCtx.currentTime + 0.45);
+                osc2.stop(audioCtx.currentTime + 0.45);
+            } catch (e) {
+                console.error("whistle synthesis failed", e);
             }
         }
 
@@ -1855,7 +1951,6 @@
                 });
             });
 
-            // --- EXPORT ROSTER BUTTON ---
             safeBindClick('export-team-btn', () => {
                 document.getElementById('import-export-title').innerText = "📤 Export Roster Code";
                 const helpEl = document.getElementById('import-export-help');
@@ -1885,7 +1980,7 @@
                     actionBtn.onclick = () => {
                         const textarea = document.getElementById('import-export-textarea');
                         textarea.select();
-                        textarea.setSelectionRange(0, 99999); // iOS selection
+                        textarea.setSelectionRange(0, 99999);
                         document.execCommand('copy');
                         actionBtn.innerText = "Copied! ✓";
                         setTimeout(() => { actionBtn.innerText = "Copy Code"; }, 2000);
@@ -1897,12 +1992,11 @@
                 }
             });
 
-            // --- IMPORT ROSTER BUTTON ---
             safeBindClick('import-team-btn', () => {
                 document.getElementById('import-export-title').innerText = "📥 Import Roster Code";
                 const helpEl = document.getElementById('import-export-help');
                 helpEl.innerText = "Paste your exported roster code here to immediately load your core squad configuration.";
-                helpEl.className = "text-xs text-slate-400 text-center leading-relaxed animate-fade-in";
+                helpEl.className = "text-xs text-red-400 text-center leading-relaxed animate-fade-in";
                 
                 const textarea = document.getElementById('import-export-textarea');
                 textarea.value = "";
@@ -2044,9 +2138,8 @@
                 if (game && game.homeScore > 0) { 
                     game.homeScore--; 
                     
-                    // Remove most recent goal event and subtract from scorer's lifetime goals
                     if (game.goalEvents && game.goalEvents.length > 0) {
-                        const removedGoal = game.goalEvents.shift(); // shifts newest out
+                        const removedGoal = game.goalEvents.shift();
                         if (removedGoal && removedGoal.scorerId) {
                             players = players.map(p => {
                                 if (p.id === removedGoal.scorerId) {
@@ -2110,7 +2203,6 @@
                 const posA = getPlayerPositionKeyInShift(currentSwapPlayerId, shift);
                 const posB = getPlayerPositionKeyInShift(targetPlayerId, shift);
                 
-                // Swap assignments
                 if (posA === 'Bench' && posB === 'Bench') {
                     // No outfield change required
                 } else if (posA === 'Bench') {
@@ -2126,7 +2218,6 @@
                     shift[posB] = currentSwapPlayerId;
                 }
 
-                // Smooth Adaptive Future Solver Recalculation
                 solveLineup(game, currentSwapShiftIndex + 1);
 
                 document.getElementById('modal-shift-swap').classList.add('hidden');
@@ -2201,204 +2292,6 @@
                 document.getElementById('modal-swap-players').classList.add('hidden');
                 renderMatchTab();
             });
-        }
-
-        function handleCreateGame() {
-            const opp = document.getElementById('input-opponent').value;
-            const dt = document.getElementById('input-date').value;
-            const qCount = parseInt(document.getElementById('select-quarters').value);
-            const sCount = parseInt(document.getElementById('select-shifts').value);
-            const mCount = parseInt(document.getElementById('input-duration').value);
-            const attendanceConfig = {};
-            players.forEach(p => attendanceConfig[p.id] = true);
-            const game = {
-                id: 'g_' + Date.now(),
-                date: dt,
-                opponent: opp,
-                quartersCount: qCount,
-                shiftsPerQuarter: sCount,
-                quarterMinutes: mCount,
-                attendance: attendanceConfig,
-                selectedGoalies: Array(qCount).fill(''),
-                lineup: null,
-                currentShiftIndex: 0,
-                homeScore: 0,
-                awayScore: 0,
-                goalEvents: [],
-                status: 'Setup'
-            };
-            games.unshift(game);
-            saveGames();
-            activeGameId = game.id;
-            document.getElementById('modal-create-game').classList.add('hidden');
-            renderGamesHub();
-        }
-
-        function populateGoalScorerGrid() {
-            const activeOnField = getActiveOnFieldPlayers();
-            const game = games.find(g => g.id === activeGameId);
-            const fieldScorersGrid = document.getElementById('modal-pitch-scorers-grid');
-            fieldScorersGrid.innerHTML = '';
-            
-            activeOnField.forEach(p => {
-                const btn = document.createElement('button');
-                btn.className = 'bg-slate-900 border border-slate-700 hover:border-emerald-500 hover:bg-slate-850 p-3 rounded-2xl text-left transition-all active:scale-95 flex items-center gap-2';
-                btn.innerHTML = `
-                    <span class="bg-slate-800 text-emerald-400 font-mono text-xs px-2 py-1 rounded">#${p.number}</span>
-                    <span class="text-xs font-bold text-white truncate">${p.name}</span>
-                `;
-                btn.addEventListener('click', () => handleLogGoalInstant(p.id));
-                fieldScorersGrid.appendChild(btn);
-            });
-            const benchScorersGrid = document.getElementById('modal-bench-scorers-list');
-            benchScorersGrid.innerHTML = '';
-            const benchPlayers = players.filter(p => game.attendance[p.id] && !activeOnField.some(on => on.id === p.id));
-            if (benchPlayers.length === 0) {
-                benchScorersGrid.innerHTML = `<p class="text-xs text-slate-555 italic text-center py-2">No benched substitutes.</p>`;
-            } else {
-                benchPlayers.forEach(p => {
-                    const btn = document.createElement('button');
-                    btn.className = 'w-full bg-slate-900/50 hover:bg-slate-800 border border-slate-800 text-left p-2 rounded-xl flex items-center gap-2';
-                    btn.innerHTML = `
-                        <span class="text-slate-555 font-mono text-[10px]">#${p.number}</span>
-                        <span class="text-xs text-slate-300">${p.name} (Bench)</span>
-                    `;
-                    btn.addEventListener('click', () => handleLogGoalInstant(p.id));
-                    benchScorersGrid.appendChild(btn);
-                });
-            }
-        }
-
-        function handleLogGoalInstant(scorerId) {
-            const game = games.find(g => g.id === activeGameId);
-            if (!game || !scorerId) return;
-            const scorer = players.find(p => p.id === scorerId);
-            if (!scorer) return;
-            const newEvent = {
-                time: formatTime(((game.quarterMinutes * 60) / game.shiftsPerQuarter) - timeRemaining),
-                shift: getShiftDetailsLabel(game.currentShiftIndex, game.shiftsPerQuarter),
-                scorerId: scorerId,
-                scorerName: `#${scorer.number} ${scorer.name}`
-            };
-            game.goalEvents = [newEvent, ...(game.goalEvents || [])];
-            game.homeScore = (game.homeScore || 0) + 1;
-            players = players.map(p => p.id === scorerId ? { ...p, goals: (p.goals || 0) + 1 } : p);
-            saveRoster();
-            saveGames();
-            document.getElementById('modal-log-goal').classList.add('hidden');
-            renderMatchTab();
-        }
-
-        function getActiveOnFieldPlayers() {
-            const game = games.find(g => g.id === activeGameId);
-            if (!game || !game.lineup) return [];
-            const shift = game.lineup[game.currentShiftIndex];
-            if (!shift) return [];
-            const activeIds = [shift.GK, shift.OL, shift.OM, shift.OR, shift.DL, shift.DM, shift.DR];
-            return players.filter(p => activeIds.includes(p.id));
-        }
-
-        function handleCloseActiveGameLog() {
-            const game = games.find(g => g.id === activeGameId);
-            if (!game) return;
-            triggerConfirmation(
-                "Save & Archive?",
-                "Complete game tracking and save the match results?",
-                () => {
-                    const updatedPlayers = players.map(p => {
-                        const activeStats = { ...p.history };
-                        game.lineup.forEach(shift => {
-                            if (shift.GK === p.id) activeStats.GK = (activeStats.GK || 0) + 1;
-                            else if (shift.OL === p.id) activeStats.OL = (activeStats.OL || 0) + 1;
-                            else if (shift.OM === p.id) activeStats.OM = (activeStats.OM || 0) + 1;
-                            else if (shift.OR === p.id) activeStats.OR = (activeStats.OR || 0) + 1;
-                            else if (shift.DL === p.id) activeStats.DL = (activeStats.DL || 0) + 1;
-                            else if (shift.DM === p.id) activeStats.DM = (activeStats.DM || 0) + 1;
-                            else if (shift.DR === p.id) activeStats.DR = (activeStats.DR || 0) + 1;
-                            else if (shift.Bench && shift.Bench.includes(p.id)) activeStats.Bench = (activeStats.Bench || 0) + 1;
-                        });
-                        return { ...p, history: activeStats };
-                    });
-                    players = updatedPlayers;
-                    saveRoster();
-                    game.status = 'Completed';
-                    saveGames();
-                    matchRunning = false;
-                    document.getElementById('nav-match-running-indicator').classList.add('hidden');
-                    renderRoster();
-                    updateTabNavigation('logs');
-                }
-            );
-        }
-
-        function getPlayerShiftRoleCode(playerId, shift) {
-            if (!shift) return 'B';
-            if (shift.GK === playerId) return 'GK';
-            if (shift.OL === playerId || shift.OM === playerId || shift.OR === playerId) return 'OFF';
-            if (shift.DL === playerId || shift.DM === playerId || shift.DR === playerId) return 'DEF';
-            return 'B';
-        }
-
-        function formatTime(secs) {
-            const m = Math.floor(secs / 60);
-            const s = secs % 60;
-            return `${m}:${s < 10 ? '0' : ''}${s}`;
-        }
-
-        function getPositionLabel(pos) {
-            const labels = {
-                GK: 'Goalie', OL: 'Left Offense', OM: 'Middle Offense', OR: 'Right Offense',
-                DL: 'Left Defense', DM: 'Middle Defense', DR: 'Right Defense', Bench: 'Bench'
-            };
-            return labels[pos] || pos;
-        }
-
-        function speakSubstitutions(subsIn, subsOut, moves) {
-            if (!voiceEnabled || !('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel(); 
-            let msg = "Substitution alert! ";
-            if (subsIn.length > 0) {
-                msg += "Entering the field: " + subsIn.map(s => `${s.name} to ${getPositionLabel(s.position)}`).join(", ") + ". ";
-            }
-            if (moves && moves.length > 0) {
-                msg += "Moving positions: " + moves.map(m => `${m.name} moves to ${getPositionLabel(m.toPosition)}`).join(", ") + ". ";
-            }
-            if (subsOut.length > 0) {
-                msg += "Headed to the bench: " + subsOut.map(s => s.name).join(", ") + ". ";
-            }
-            const utterance = new SpeechSynthesisUtterance(msg);
-            utterance.rate = 0.95; 
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // Web Audio synthesized ref whistle
-        function playRefWhistle() {
-            if (!soundEnabled) return;
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc1 = audioCtx.createOscillator();
-                const osc2 = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                osc1.type = 'sine';
-                osc1.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc1.frequency.exponentialRampToValueAtTime(1300, audioCtx.currentTime + 0.15);
-                osc1.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.35);
-                osc2.type = 'triangle';
-                osc2.frequency.setValueAtTime(805, audioCtx.currentTime);
-                osc2.frequency.exponentialRampToValueAtTime(1305, audioCtx.currentTime + 0.15);
-                osc2.frequency.exponentialRampToValueAtTime(1005, audioCtx.currentTime + 0.35);
-                gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
-                osc1.connect(gainNode);
-                osc2.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                osc1.start();
-                osc2.start();
-                osc1.stop(audioCtx.currentTime + 0.45);
-                osc2.stop(audioCtx.currentTime + 0.45);
-            } catch (e) {
-                console.error("whistle synthesis failed", e);
-            }
         }
     </script>
 </body>
