@@ -1132,6 +1132,9 @@
             
             if (S_rem <= 0) return;
 
+            const lockedOffGame = (game.strategyLocks && game.strategyLocks.OFF) ? game.strategyLocks.OFF.filter(Boolean) : [];
+            const lockedDefGame = (game.strategyLocks && game.strategyLocks.DEF) ? game.strategyLocks.DEF.filter(Boolean) : [];
+
             // 1. Calculate GAME-LONG Target Quotas, Accounting for Missing Players Mid-Game
             const computedLineup = game.lineup ? game.lineup.slice(0, startShiftIndex) : [];
             const activeOffenseCounts = {};
@@ -1175,6 +1178,15 @@
             const targetOutfieldBudgets = {};
             presentPlayers.forEach(p => targetOutfieldBudgets[p.id] = baseBudget);
             for (let i = 0; i < remainder; i++) targetOutfieldBudgets[sortedForExtra[i].id]++;
+
+            // Strictly Sync Paired Players' Budgets
+            presentPlayers.forEach(p => {
+                if (p.pairedWith && targetOutfieldBudgets[p.id] !== undefined && targetOutfieldBudgets[p.pairedWith] !== undefined) {
+                    const maxB = Math.max(targetOutfieldBudgets[p.id], targetOutfieldBudgets[p.pairedWith]);
+                    targetOutfieldBudgets[p.id] = maxB;
+                    targetOutfieldBudgets[p.pairedWith] = maxB;
+                }
+            });
 
             // 2. PERFECT MATHEMATICAL TOKEN SYSTEM (Never breaks 50/50 for even players)
             const targetOffense = {};
@@ -1269,10 +1281,8 @@
                 const candidateIds = candidates.map(p => p.id);
                 
                 const isFinalShift = (t === S_total - 1);
-                const lockedOff = (isFinalShift && game.strategyLocks && game.strategyLocks.OFF) 
-                                  ? game.strategyLocks.OFF.filter(id => id && candidateIds.includes(id)) : [];
-                const lockedDef = (isFinalShift && game.strategyLocks && game.strategyLocks.DEF) 
-                                  ? game.strategyLocks.DEF.filter(id => id && candidateIds.includes(id)) : [];
+                const lockedOff = isFinalShift ? lockedOffGame.filter(id => candidateIds.includes(id)) : [];
+                const lockedDef = isFinalShift ? lockedDefGame.filter(id => candidateIds.includes(id)) : [];
                 
                 const availableShifts = {};
                 presentPlayers.forEach(p => {
@@ -1384,6 +1394,12 @@
                                 if (role === 'OFF' && remDef >= outfieldShiftsLeft) pScore -= 10000000;
                                 if (role === 'DEF' && remOff >= outfieldShiftsLeft) pScore -= 10000000;
 
+                                // STRATEGY LOCK FIX: Actively reserve their final quota for the last shift so they don't overplay!
+                                if (t < S_total - 1) {
+                                    if (lockedOffGame.includes(id) && role === 'OFF' && remOff <= 1) pScore -= 10000000;
+                                    if (lockedDefGame.includes(id) && role === 'DEF' && remDef <= 1) pScore -= 10000000;
+                                }
+
                                 // ENDGAME GUARANTEE: Save shifts for endgame
                                 if (t < endWindowStart && totalRem <= 1 && !hasEndgameGoalie) {
                                     pScore -= 10000000; // Hard reject to save shift for the end
@@ -1429,6 +1445,17 @@
                         for(let i = 0; i < offGroup.length; i++) score += evalPlayer(offGroup[i], 'OFF');
                         for(let i = 0; i < defGroup.length; i++) score += evalPlayer(defGroup[i], 'DEF');
                         for(let i = 0; i < benchGroup.length; i++) score += evalPlayer(benchGroup[i], 'BENCH');
+
+                        // STRICT PAIRING ENFORCEMENT: Massive mathematical penalty for breaking up pairs
+                        let pairPenalty = 0;
+                        presentPlayers.forEach(p => {
+                            if (p.pairedWith && candidateIds.includes(p.id) && candidateIds.includes(p.pairedWith)) {
+                                const pRole = offGroup.includes(p.id) ? 'OFF' : defGroup.includes(p.id) ? 'DEF' : 'BENCH';
+                                const partnerRole = offGroup.includes(p.pairedWith) ? 'OFF' : defGroup.includes(p.pairedWith) ? 'DEF' : 'BENCH';
+                                if (pRole !== partnerRole) pairPenalty -= 20000000; // Break pairs ONLY as an absolute last resort
+                            }
+                        });
+                        score += pairPenalty;
 
                         if (score > bestScore) {
                             bestScore = score;
